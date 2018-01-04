@@ -1,0 +1,7 @@
+Here :
+
+-Phase vocoder
+-Alignment
+-Mixing
+
+associated test datasets
