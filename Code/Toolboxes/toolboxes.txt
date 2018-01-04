@@ -1,0 +1,8 @@
+--- Signal Processing ---
+
+Madmom
+Librosa
+
+--- Machine Learning ---
+
+Keras
