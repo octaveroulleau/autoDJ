@@ -1,6 +1,8 @@
 Here :
 
-Pre processing algos : 
+1. Loading
+
+2. Pre processing algos : 
 -Compute CQT
 -Normalize
 -Whiten
