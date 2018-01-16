@@ -10,7 +10,7 @@ from data.sets.audio import DatasetAudio
 import pdb
 
 def asynchronous_learning(audioSet, batch_size = 64, nb_epochs = 5):
-    asyncTask = AsynchronousTask(DatasetAudio.getAsynchronousImport(self), numWorkers = 4, batch_size = batch_size, shuffle = False)
+    asyncTask = AsynchronousTask(DatasetAudio.getAsynchronousImport(audioSet), numWorkers = 4, batch_size = batch_size, shuffle = False)
     asyncTask.createTask(audioSet)
     for batchIDx, (currentData, currentMeta) in enumerate(asyncTask):
         print('[Batch ' + str(batchIDx) + '] Learning step on ' + str(len(currentData)) + ' examples');
