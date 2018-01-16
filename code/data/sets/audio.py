@@ -251,7 +251,7 @@ def importAudioData(curBatch, options):
     #finalCommand = options["matlabCommand"] + ' -nodesktop -nodisplay -nojvm -r '
     # Add the transform types
     transformString = "{";
-    for it in range(len(options["transformType"])):
+    for it in range(len(options['transformType'])):
         transformString = transformString + '\'' + options["transformType"][it] + ((it < (len(options["transformType"]) - 1)) and '\',' or '\'}')
     finalCommand = finalCommand + ' "transformType=' + transformString + '; oldRoot = \'' + options["dataDirectory"] +  '\'; newRoot = \'' + options["analysisDirectory"] + '\'';
     # Find the path of the current toolbox (w.r.t the launching path)
