@@ -12,7 +12,7 @@ import pdb
 def asyncTaskPointer(idx, dataIn, options):
     print('loading'+ dataIn[idx])
     
-    data, meta = importAudioData(dataIn, options)
+    data, meta = importAudioData(dataIn, {"transformOptions": options["transformOptions"]})
     return data, meta
     
 def asynchronous_learning(audioSet, audioOptions, batch_size = 64, nb_epochs = 5):
