@@ -1,1 +1,0 @@
-# Mostly for training : returns the mixing points where the VAE thinks we can switch from a track to another (chunk_n and chunk_n+1 don't originally come from the same track)
