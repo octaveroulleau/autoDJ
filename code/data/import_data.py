@@ -41,7 +41,7 @@ import numpy as np
 def import_data(pamTransforms = 'cqt'):
     #%%
     # Root to find the GTZAN dataset
-    baseFolder = "../../autodj_sets/datasets"
+    baseFolder = "../../../autodj_sets/datasets"
     # All metadatas that we will import
     taskList = ["artist", "beat", "downbeat", "genre", "key", "tempo"]
     # All transforms that we should import
