@@ -8,7 +8,7 @@
                         <esling@ircam.fr>
 
 """
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 import numpy as np
 import scipy as sp
 import os
@@ -22,12 +22,12 @@ from . import utils as du
 ###################################
 """
 
-class DatasetAudio(dat.Dataset):    
+class DatasetAudio(dat.Dataset):
     """ Definition of a basic dataset
     Attributes:
-        dataDirectory: 
+        dataDirectory:
     """
-        
+
     def __init__(self, options):
         super(DatasetAudio, self).__init__(options)
         # Accepted types of files
@@ -44,7 +44,7 @@ class DatasetAudio(dat.Dataset):
     # Import functions
     ###################################
     """
-    
+
     def importData(self, idList, options):
         """ Import part of the audio dataset (linear fashion) """
         options["matlabCommand"] = options.get("matlabCommand") or self.matlabCommand;
@@ -87,12 +87,12 @@ class DatasetAudio(dat.Dataset):
             "analysisDirectory":self.analysisDirectory,
             "forceRecompute":self.forceRecompute,
             "transformOptions":transformOpt,
-            "verbose":self.verbose 
+            "verbose":self.verbose
             }
         return importAudioData, options
 
     def windowData(self, target_size, overlap, options):
-        new_data = [] 
+        new_data = []
         new_metadata = []
         # Temporarily separate if phase is concatenated
         new_size = target_size * self.data[0].shape[1]
@@ -127,7 +127,7 @@ class DatasetAudio(dat.Dataset):
     # Obtaining transform set and options
     ###################################
     """
-    
+
     def getTransforms(self):
         """
         Transforms (and corresponding options) available
@@ -215,11 +215,11 @@ class DatasetAudio(dat.Dataset):
             "strfMean":0                  # Only produce the mean activations
         }
         return transformList, transformOptions;
-       
+
     def __dir__(self):
         tmpList = super(DatasetAudio, self).__dir__()
         return tmpList + ['importBatchSize', 'transformType', 'matlabCommand']
-    
+    '''
     def plotExampleSet(self, setData, labels, task, ids):
         fig = plt.figure(figsize=(12, 24))
         ratios = np.ones(len(ids))
@@ -236,16 +236,16 @@ class DatasetAudio(dat.Dataset):
             plt.title('Label : ' + str(labels[task][ids[ind1]]))
             ax.set_adjustable('box-forced')
         fig.tight_layout()
-        
+
     def plotRandomBatch(self, task="genre", nbExamples=5):
         setIDs = np.random.randint(0, len(self.data), nbExamples)
         self.plotExampleSet(self.data, self.metadata, task, setIDs)
-    
+    '''
 """
 ###################################
 # External functions for audio import
 ###################################
-"""       
+"""
 def importAudioData(curBatch, options):
     # Prepare the call to matlab command
     finalCommand = options["matlabCommand"] + ' -nodesktop -nodisplay -nojvm -r '
@@ -276,9 +276,9 @@ def importAudioData(curBatch, options):
         except IOError:
             fIDTest = None
         if ((fIDTest is None) or (options["forceRecompute"] == True)):
-            audioList[curIDf] = curFile 
+            audioList[curIDf] = curFile
             curIDf = curIDf + 1
-        else: 
+        else:
             fIDTest.close()
     audioList = audioList[:curIDf]
     # Some of the files have not been computed yet
