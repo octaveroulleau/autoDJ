@@ -248,7 +248,7 @@ class DatasetAudio(dat.Dataset):
 """
 def importAudioData(curBatch, options):
     # Prepare the call to matlab command
-    finalCommand = options["matlabCommand"] + ' -nodesktop -nodisplay -nojvm -r '
+    #finalCommand = options["matlabCommand"] + ' -nodesktop -nodisplay -nojvm -r '
     # Add the transform types
     transformString = "{";
     for it in range(len(options["transformType"])):
