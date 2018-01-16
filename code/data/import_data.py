@@ -116,7 +116,6 @@ def import_data(pamTransforms = 'cqt'):
     tempAnalysis = audioSet.analysisDirectory
     audioSet.transformType = [pamTransforms]
     audioSet.analysisDirectory = tempAnalysis + pamTransforms + '/'
-    audioOptions.update({"transformOptions" : transformOptions})
 
     return audioSet, audioOptions
 
