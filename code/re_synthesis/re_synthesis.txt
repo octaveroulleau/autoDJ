@@ -4,4 +4,6 @@ Here :
 -Alignment
 -Mixing
 
-associated test datasets
++ associated test datasets
+
+Mainly used for normal mode (forward/composition)

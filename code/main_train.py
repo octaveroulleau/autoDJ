@@ -4,6 +4,6 @@
 
 # Pre-process data
 
-# Train CNNs asynchronously
+# Train CNNs asynchronously + save model
 
-# Train VAE
+# Train VAE + save model
