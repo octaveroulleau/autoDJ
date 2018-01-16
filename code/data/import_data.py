@@ -54,6 +54,7 @@ def import_data(pamTransforms = 'cqt'):
     """
 
     audioOptions = {
+    "matlabCommand":'',
     "dataDirectory":baseFolder+'/gtzan/data',
     "metadataDirectory":baseFolder+'/gtzan/metadata',
     "dataPrefix":baseFolder,
