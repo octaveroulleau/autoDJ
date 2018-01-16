@@ -30,7 +30,7 @@ import pdb
 from data.sets.audio import DatasetAudio
 #from asynchronous.task import AsynchronousTask
 # External libs import
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 import skimage.transform as skt
 import numpy as np
 #import dielemann.build
