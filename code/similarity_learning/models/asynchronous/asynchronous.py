@@ -17,7 +17,7 @@ def asyncTaskPointer(idx, dataIn, options):
     
 def asynchronous_learning(audioSet, batch_size = 64, nb_epochs = 5):
     asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 64, shuffle = False)
-    transfi_list, tranform_options  = audioSet.getTransforms()
+    transfi_list, transform_options  = audioSet.getTransforms()
     asyncTask.createTask(audioSet.files, options = {"transformOptions": transform_options})
     for batchIDx, (currentData, currentMeta) in enumerate(asyncTask):
         print('[Batch ' + str(batchIDx) + '] Learning step on ' + str(len(currentData)) + ' examples');
