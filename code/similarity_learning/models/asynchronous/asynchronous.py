@@ -12,6 +12,7 @@ import pdb
 import time
 
 def asyncTaskPointer(idx, dataIn, options):
+    pdb.set_trace()
     '''
     TO DO
     - Call track to chunk function and pass data and metadata through
