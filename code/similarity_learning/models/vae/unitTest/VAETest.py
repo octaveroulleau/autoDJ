@@ -14,7 +14,7 @@ import os
 import shutil
 # Add the src folder path to the sys.path list
 sys.path.append('../src')
-sys.path.append('../src/dataset')
+# sys.path.append('../src/dataset')
 sys.path.append('../src/Visualize')
 
 import matplotlib.pyplot as plt
@@ -466,11 +466,11 @@ class TestVAEVisualize(unittest.TestCase):
 #---------------------------- Test suites ------------------------------------
 
 suiteVAECreation = unittest.TestLoader().loadTestsFromTestCase(TestVAECreation)
-print "\n\n------------------- VAE Creation Test Suite -------------------\n"
+print ("\n\n------------------- VAE Creation Test Suite -------------------\n")
 unittest.TextTestRunner(verbosity=2).run(suiteVAECreation)
 suiteVAEFunctions = unittest.TestLoader().loadTestsFromTestCase(TestVAEFunctions)
-print "\n\n------------------- VAE functions Test Suite -------------------\n"
+print ("\n\n------------------- VAE functions Test Suite -------------------\n")
 unittest.TextTestRunner(verbosity=2).run(suiteVAEFunctions)
 suiteVAEVisualize = unittest.TestLoader().loadTestsFromTestCase(TestVAEVisualize)
-print "\n\n------------------- VAE visualization Test Suite -------------------\n"
+print ("\n\n------------------- VAE visualization Test Suite -------------------\n")
 unittest.TextTestRunner(verbosity=2).run(suiteVAEVisualize)

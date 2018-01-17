@@ -6,7 +6,8 @@ This module gives unit testing classes for handling .npz datasets
 import unittest
 import sys
 # Add the src folder path to the sys.path list
-sys.path.append('../src/dataset')
+# sys.path.append('../src/dataset')
+sys.path.append('../src/')
 
 from ManageDataset import NPZ_Dataset
 
@@ -40,6 +41,6 @@ class TestNPZDataset(unittest.TestCase):
 #---------------------------- Test suites ------------------------------------
 
 suiteNPZDataset = unittest.TestLoader().loadTestsFromTestCase(TestNPZDataset)
-print "\n\n------------------- Dataset from .npz file Test Suite -------------------\n"
+print("\n\n------------------- Dataset from .npz file Test Suite -------------------\n")
 unittest.TextTestRunner(verbosity=2).run(suiteNPZDataset)
 

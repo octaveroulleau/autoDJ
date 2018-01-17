@@ -129,8 +129,8 @@ class TestDecoder(unittest.TestCase):
 #---------------------------- Test suites ------------------------------------
 
 suiteEncoder = unittest.TestLoader().loadTestsFromTestCase(TestEncoder)
-print "\n\n------------------- Encoder Test Suite -------------------\n"
+print("\n\n------------------- Encoder Test Suite -------------------\n")
 unittest.TextTestRunner(verbosity=2).run(suiteEncoder)
 suiteDecoder = unittest.TestLoader().loadTestsFromTestCase(TestDecoder)
-print "\n\n------------------- Decoder Test Suite -------------------\n"
+print("\n\n------------------- Decoder Test Suite -------------------\n")
 unittest.TextTestRunner(verbosity=2).run(suiteDecoder)

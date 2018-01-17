@@ -104,13 +104,13 @@ class Encoder(nn.Module):
         self.nb_h = len(dimValues) - 2
         # check if args match
         if self.nb_h < 1:
-            print "ERROR_Encoder: Not enough dimension values"
+            print ("ERROR_Encoder: Not enough dimension values")
             return None
         elif self.dimX != dimValues[0]:
-            print "ERROR_Encoder: X & NN input dimensions mismatched"
+            print ("ERROR_Encoder: X & NN input dimensions mismatched")
             return None
         elif self.dimZ != dimValues[len(dimValues) - 1]:
-            print "ERROR_Encoder: Z & NN output dimensions mismatched"
+            print ("ERROR_Encoder: Z & NN output dimensions mismatched")
             return None
 
         # store IO dimensions for each layers in a list
@@ -227,13 +227,13 @@ class Decoder(nn.Module):
             raise
         # check if args match
         if self.nb_h < 1:
-            print "ERROR_Decoder: Not enough dimension values"
+            print ("ERROR_Decoder: Not enough dimension values")
             return None
         elif self.dimZ != dimValues[0]:
-            print "ERROR_Decoder: Z & NN input dimensions mismatched"
+            print ("ERROR_Decoder: Z & NN input dimensions mismatched")
             return None
         elif self.dimX != dimValues[len(dimValues) - 1]:
-            print "ERROR_Decoder: X & NN output dimensions mismatched"
+            print ("ERROR_Decoder: X & NN output dimensions mismatched")
             return None
 
         # store IO dimensions for each layers in a list

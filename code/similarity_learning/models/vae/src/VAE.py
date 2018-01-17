@@ -25,6 +25,7 @@ Todo:
 """
 
 import os
+import sys
 import time
 import math
 
@@ -37,9 +38,8 @@ from torch.autograd import Variable
 from torchvision.utils import save_image
 import torch.utils.data
 from torchvision import datasets, transforms
-
+sys.path.append('similarity_learning/models/vae/src')
 from EncoderDecoder import Encoder, Decoder
-
 
 #---------------------------- Begin class VAE ---------------------------------
 
@@ -114,7 +114,7 @@ class VAE(nn.Module):
         self.decoder = Decoder(Z_dim, self.IOh_dims_Dec,
                                X_dim, bernoulli, gaussian)
         if (self.encoder.created == False or self.decoder.created == False):
-            print "ERROR_VAE: Wrong encoder/decoder structure"
+            print("ERROR_VAE: Wrong encoder/decoder structure")
             return None
 
         # check if NL_types length & layers number are the same
@@ -122,11 +122,11 @@ class VAE(nn.Module):
         self. NL_funcD = NL_types_Dec
         # in Encoder
         if len(self.NL_funcE) != self.encoder.nb_h:
-            print "ERROR_VAE: not enough or too many NL functions in encoder"
+            print("ERROR_VAE: not enough or too many NL functions in encoder")
             return None
         # in Decoder
         if len(self.NL_funcD) != self.decoder.nb_h:
-            print "ERROR_VAE: not enough or too many NL functions in decoder"
+            print("ERROR_VAE: not enough or too many NL functions in decoder")
             return None
 
         # check if each elemt of NL_types exists in 'torch.nn.functional' module
@@ -136,7 +136,7 @@ class VAE(nn.Module):
                 getattr(F, self.NL_funcE[index_h])
             except AttributeError:
                 pass
-                print "ERROR_VAE: Wrong encoder NL function name"
+                print("ERROR_VAE: Wrong encoder NL function name")
                 return None
         # in Decoder
         for index_h in range(self.decoder.nb_h):
@@ -144,7 +144,7 @@ class VAE(nn.Module):
                 getattr(F, self.NL_funcD[index_h])
             except AttributeError:
                 pass
-                print "ERROR_VAE: Wrong encoder NL function name"
+                print("ERROR_VAE: Wrong encoder NL function name")
                 return None
 
         # store encoder and decoder parameters
@@ -208,7 +208,7 @@ class VAE(nn.Module):
     def forward(self, X):
         """Compute forward through VAE. Called in trainVAE() for loop (see 'self(X)')."""
         if self.created == False:
-            print "ERROR_VAE_forward: VAE not correctly created"
+            print("ERROR_VAE_forward: VAE not correctly created")
             return None
         # compute z from X
         # if wanted noise input during training

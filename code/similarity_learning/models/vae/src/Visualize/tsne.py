@@ -32,7 +32,7 @@ def x2p(X=np.array([]), tol=1e-5, perplexity=30.0):
     """Performs a binary search to get P-values in such a way that each conditional Gaussian has the same perplexity."""
 
     # Initialize some variables
-    print "Computing pairwise distances..."
+    print("Computing pairwise distances...")
     (n, d) = X.shape
     sum_X = np.sum(np.square(X), 1)
     D = np.add(np.add(-2 * np.dot(X, X.T), sum_X).T, sum_X)
@@ -45,7 +45,7 @@ def x2p(X=np.array([]), tol=1e-5, perplexity=30.0):
 
         # Print progress
         if i % 500 == 0:
-            print "Computing P-values for point ", i, " of ", n, "..."
+            print("Computing P-values for point ", i, " of ", n, "...")
 
         # Compute the Gaussian kernel and entropy for the current precision
         betamin = -np.inf
@@ -81,7 +81,7 @@ def x2p(X=np.array([]), tol=1e-5, perplexity=30.0):
         P[i, np.concatenate((np.r_[0:i], np.r_[i + 1:n]))] = thisP
 
     # Return final P-matrix
-    print "Mean value of sigma: ", np.mean(np.sqrt(1 / beta))
+    print("Mean value of sigma: ", np.mean(np.sqrt(1 / beta)))
     return P
 
 
@@ -91,10 +91,10 @@ def tsne(X=np.array([]), no_dims=2, initial_dims=50, perplexity=30.0):
 
     # Check inputs
     if X.dtype != "float64":
-        print "Error: array X should have type float64."
+        print("Error: array X should have type float64.")
         return -1
     # if no_dims.__class__ != "<type 'int'>":            # doesn't work yet!
-    #    print "Error: number of dimensions should be an integer.";
+    #    print("Error: number of dimensions should be an integer.";)
     #    return -1;
 
     # Initialize variables
@@ -148,7 +148,7 @@ def tsne(X=np.array([]), no_dims=2, initial_dims=50, perplexity=30.0):
         # Compute current value of cost function
         if (iter + 1) % 10 == 0:
             C = np.sum(P * np.log(P / Q))
-            print "Iteration ", (iter + 1), ": error is ", C
+            print("Iteration ", (iter + 1), ": error is ", C)
 
         # Stop lying about P-values
         if iter == 100:
