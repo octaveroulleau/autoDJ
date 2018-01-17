@@ -4,6 +4,8 @@
 3. Use T-SNE to visually check coherence of the embedding space
 """
 
+# Use toymix !!! (chunk by chunk)
+
 def forward(cnn_data, model):
 	""" Input training set in CNN's feature space
 	Output the same set in the VAE's latent space

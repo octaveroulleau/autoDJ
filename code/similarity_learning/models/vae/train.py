@@ -10,6 +10,8 @@
 # VAE model
 
 # VAE training
+# Task : auto-encoding of the chunks' features (sort of t-sne : organise space), dim 10.
+# Alternatively, concatenate 3 chunks and organise a "track space"
 
 def save_vae_model(model, filename):
   """ Saves trained VAE, serialized, to a file for reuse (evaluation and run)
