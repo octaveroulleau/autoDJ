@@ -7,4 +7,4 @@ transform_type, transform_options = audioSet.getTransforms()
 audioSet.files = audioSet.files[1:21]
 nb_frames = 1000
 
-asynchronous_learning(audioSet, audioOptions, nb_frames, model_type, model_options)
+asynchronous_learning(audioSet, audioOptions)
