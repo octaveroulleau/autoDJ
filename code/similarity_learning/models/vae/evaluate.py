@@ -6,6 +6,10 @@
 
 # Use toymix !!! (chunk by chunk)
 
+import numpy as np
+import visualize.plot_vae.dimension_reduction as dr
+import VAE
+
 def forward(cnn_data, model):
 	""" Input training set in CNN's feature space
 	Output the same set in the VAE's latent space
@@ -26,57 +30,17 @@ def t_sne_train(model):
 	"""
 
 
+#%% Fake dataset
+input_dim = 1000
+nb_chunks = 10000
+label_dim = 10
+data = np.random.rand(nb_chunks,1000).astype('float32')
+labels = np.zeros((nb_chunks, label_dim)).astype('int32')
 
+#%% Load a pre-trained VAE
+filepath = 'similarity_learning/models/vae/saved_models/test_spec_softplus.t7'
+vae = VAE.load_vae(filepath)
 
-
-# get savefile path
-directory = args.vae_path
-savefile = directory.split("/")[-1]
-directory = directory.replace(savefile, "")
-# load vae
-vaeLoaded = loadVAE(savefile, directory)
-
-
-def test_VAE_load(self):
-    # try to load a vae 
-    vae = loadVAE('dummyDataset98_NPZ_E<1024-relu6-600-muSig-10>_D<10-relu6-600-muSig-1024>_beta1_mb49_lr0dot001_ep5',
-                  './dummySaveTest/')
-    self.assertTrue(vae.created and vae.loaded)
-
-
-def test_VAE_PCA(self):
-    # try to load a vae
-    vaeLoaded = loadVAE('dummyDataset98_NPZ_E<1024-relu6-401-muSig-6>_D<6-relu6-399-sigmoid-1024>_beta1_mb49_lr0dot001_ep11','./dummySaveTest/')
-    test = numpy.load("./dummyDataset/dummyDataset98.npz")
-    # vaeLoaded = loadVAE('toy-spectral-richness-v2-lin_NPZ_E<1024-relu6-600-muSig-10>_D<10-relu6-600-muSig-1024>_beta3_mb100_lr0dot001_ep400',
-    #                     "../data/savedVAE/Alexis-nonNorm/beta3/WU100/")
-    # test = numpy.load("../data/toy-spectral-richness-v2-lin.npz")
-    spec = test['Spectrums']
-    lbl = test['labels']
-
-    lbltest = []
-    lbltest = lbl[:, 0:98:]
-    spec = spec[:, 0:98]
-    print("~~~ Nb samples :", len(lbltest[0, :]))
-
-    spec = torch.from_numpy(spec)
-    spec = spec.float()
-    spec = spec.t()
-    lblarr = numpy.array(lbltest)
-
-    spec = Variable(spec)
-
-    z_res = vaeLoaded.encode(spec)
-    z_res = z_res.data
-    z_res = z_res.double()
-
-    PCA_vision(z_res, lblarr, 0)
-    plt.figure()
-
-    z_res = z_res.numpy()
-
-    Y = tsne(z_res, 2, 10)
-    plt.scatter(Y[:, 0], Y[:, 1], 20, lblarr[0])
-    plt.show()
-
-    self.assertTrue(vaeLoaded.loaded)
+#%% Plotting and dimension reduction
+dr.plot_latent2(data, vae, n_points=2000, method=dr.latent_pca, layer=0, write="pca") #, labels=labels
+#dr.plot_latent3(dataset, vae, n_points=10000, method=dr.latent_pca, task="class", layer=1)

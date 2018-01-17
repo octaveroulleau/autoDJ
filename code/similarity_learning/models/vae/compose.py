@@ -8,15 +8,26 @@ Returns a list of mixing points : that can be used to re-synthetize a new track
 
 # Random walk : draw a line in latent space, discretize, find nearest neighbors.
 
-# get savefile path
-directory = args.vae_path
-savefile = directory.split("/")[-1]
-directory = directory.replace(savefile, "")
-# load vae
-vaeLoaded = loadVAE(savefile, directory)
+import numpy as np
+from numpy.random import permutation
+import torch
+from torch.autograd import Variable
 
-def test_VAE_load(self):
-    # try to load a vae 
-    vae = loadVAE('dummyDataset98_NPZ_E<1024-relu6-600-muSig-10>_D<10-relu6-600-muSig-1024>_beta1_mb49_lr0dot001_ep5',
-                  './dummySaveTest/')
-    self.assertTrue(vae.created and vae.loaded)
+import visualize.plot_vae.dimension_reduction as dr
+import VAE
+
+#%% Fake dataset
+input_dim = 1000
+nb_chunks = 123
+label_dim = 10
+data = np.random.rand(nb_chunks,1000).astype('float32')
+labels = np.zeros((nb_chunks, label_dim)).astype('int32')
+
+#%% Load a pre-trained VAE
+filepath = 'similarity_learning/models/vae/saved_models/test_spec_softplus.t7'
+vae = VAE.load_vae(filepath)
+
+#%% Perform a forward pass to project to embedding space
+x = Variable(torch.from_numpy(data))
+x_params, z_params, z  = vae.forward(x)
+print(z[2])
