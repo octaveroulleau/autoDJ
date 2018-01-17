@@ -58,9 +58,9 @@ def import_data(pamTransforms = 'cqt'):
     "dataDirectory":baseFolder+'/gtzan/data',
     "metadataDirectory":baseFolder+'/gtzan/metadata',
     "dataPrefix":baseFolder,
-    "analysisDirectory":baseFolder+'/gtzan/transforms/',    # Root to place (and find) the transformed data
+    "analysisDirectory":baseFolder+'/gtzan/transforms/cqt',    # Root to place (and find) the transformed data
     "importType":'asynchronous',                            # Type of import (direct or asynchronous)
-    "transformType":['cqt'],                               # Type of transform (can be a list)
+    "transformType":['cqt'],                                # Type of transform (can be a list)
     "tasks":taskList,                                       # Tasks to import
     "verbose":True,                                         # Be verbose or not
     "checkIntegrity":False,                                 # Check that files exist (while loading)
