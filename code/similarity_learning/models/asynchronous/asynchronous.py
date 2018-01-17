@@ -18,12 +18,16 @@ def asyncTaskPointer(idx, dataIn, options):
     return data, meta
     
 def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5):
-    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 5, shuffle = False)
+    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 2, batchSize = 5, shuffle = False)
     asyncTask.createTask(audioSet.files, audioOptions)
-    for batchIDx, (currentData, currentMeta) in enumerate(asyncTask):
-        print('boucle')
-        print('[Batch ' + str(batchIDx) + '] Learning step on ' + str(len(currentData)) + ' examples');
-        dummy_learn(currentData, currentMeta);
+    for epoch in range(nb_epochs):
+        print('Epoch #' + str(epoch));
+        for batchIDx, (currentData, currentMeta) in enumerate(asyncTask):
+            print('boucle')
+            print('[Batch ' + str(batchIDx) + '] Learning step on ' + str(len(currentData)) + ' examples');
+            dummy_learn(currentData, currentMeta);
+        print('Finished epoch #'+str(epoch))
+        asyncTask.cleanTask();
     
     return 0
 
@@ -32,7 +36,7 @@ def dummy_learn(currentData, currentMeta):
     print(len(currentData))
     # Simulate time
     for t in range(len(currentData)):
-        print('Learning on ID #' + str(currentMeta[0])) #+ " - 1st elt : " + str(currentData[t][1][1]))
+        print('Learning on ID #' + str(currentMeta[0][t])) #+ " - 1st elt : " + str(currentData[t][1][1]))
         for t2 in range(100):
             currentData[0] = currentData[0] + currentData[t];
     
