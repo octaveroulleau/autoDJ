@@ -9,6 +9,7 @@
 
 """
 #from matplotlib import pyplot as plt
+import pdb
 import numpy as np
 import scipy as sp
 import os
@@ -247,6 +248,7 @@ class DatasetAudio(dat.Dataset):
 ###################################
 """
 def importAudioData(curBatch, options):
+    pdb.set_trace()
     # Prepare the call to matlab command
     finalCommand = options["matlabCommand"] + ' -nodesktop -nodisplay -nojvm -r '
     # Add the transform types

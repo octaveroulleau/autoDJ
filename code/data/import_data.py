@@ -114,7 +114,7 @@ def import_data(pamTransforms = 'cqt'):
     # Prepare asynchronous pointers
     transformList, transformOptions = audioSet.getTransforms();
     tempAnalysis = audioSet.analysisDirectory
-    audioSet.transformType = [pamTransforms]
+    audioSet.transformType = pamTransforms
     audioSet.analysisDirectory = tempAnalysis + pamTransforms + '/'
     audioOptions.update({"transformOptions" : transformOptions})
 
