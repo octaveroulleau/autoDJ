@@ -12,6 +12,7 @@ import pdb
 import time
 import similarity_learning.models.dielemann.build as build
 import numpy as np
+import keras
 
 
 def asyncTaskPointer(idx, dataIn, options):
