@@ -34,7 +34,7 @@ from data.sets.audio import DatasetAudio
 import skimage.transform as skt
 import numpy as np
 #import dielemann.build
-import keras
+#import keras
 #from data_to_phrase import *
 
 
