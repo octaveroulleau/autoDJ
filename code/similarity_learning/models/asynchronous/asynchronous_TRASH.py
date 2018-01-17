@@ -18,7 +18,7 @@
 """
 
 # Import all corresponding classes
-from similarity_learning.models.asynchronous.task import AsynchronousTask
+from asynchronous.task import AsynchronousTask
 # Other imports for demonstration
 import numpy as np
 import time
