@@ -16,7 +16,7 @@ def asyncTaskPointer(idx, dataIn, options):
     return data, meta
     
 def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5):
-    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 64, shuffle = False)
+    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 5, shuffle = False)
     asyncTask.createTask(audioSet.files, audioOptions)
     for batchIDx, (currentData, currentMeta) in enumerate(asyncTask):
         print('boucle')
@@ -26,7 +26,7 @@ def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5)
     return 0
 
 def dummy_learn(currentData, currentMeta):
-    pdb.set_trace()
     print(currentData)
     print(currentMeta)
+    time.sleep(0.5)
     
