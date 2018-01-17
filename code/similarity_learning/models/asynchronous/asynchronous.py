@@ -10,7 +10,7 @@ from data.sets.audio import DatasetAudio, importAudioData
 #from similarity_learning.models.dielemann.build import *
 import pdb
 import time
-from similarity_learning.models.dielemann.build import *
+import similarity_learning.models.dielemann.build as build
 
 
 def asyncTaskPointer(idx, dataIn, options):
