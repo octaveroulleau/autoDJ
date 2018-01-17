@@ -11,18 +11,20 @@ from data.sets.audio import DatasetAudio, importAudioData
 import pdb
 import time
 
+audioSet.importMetadata
+
 def asyncTaskPointer(idx, dataIn, options):
     '''
     TO DO
     - Call track to chunk function and pass data and metadata through
     - Fix meta import
     '''
+    audioSet = options['audioSet']
     print('loading'+ dataIn[idx])
     
     data, meta = importAudioData(dataIn, options)
-    meta = options['metadata']['genre'][idx]
-    print('artist = '+str(meta))
-    print('idx = '+str(idx))
+    audioSet.importMetadataTasks();
+    meta = audioSet.metadata
     return data, meta
     
 def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5):
@@ -34,7 +36,7 @@ def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5)
     '''
     asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 5, shuffle = False)
     options = audioOptions
-    options.update({"metadata":audioSet.metadata})
+    options["audioSet"] = audioSet
     asyncTask.createTask(audioSet.files, options)
 
     for epoch in range(nb_epochs):
