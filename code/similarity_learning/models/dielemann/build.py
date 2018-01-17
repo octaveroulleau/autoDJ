@@ -204,18 +204,22 @@ def build_conv_layers(frames, freq_bins, mod_options):
     if mod_options['batchNormConv']:
         conv_3 = layers.BatchNormalization()(conv_3)
     
-        #%%========== Global temporal pooling layer =========
-    pool_max = layers.GlobalMaxPooling1D()(inputs)
-    pool_average = layers.GlobalAveragePooling1D()(inputs)
-    pool_LP = layers.Lambda(lambda x:  GlobalLPPooling1D(x))(inputs)
-    
-    pool_time = layers.Concatenate()([pool_max, pool_average, pool_LP])
-    
     model = Model(inputs = inputs, outputs = pool_time)
     
     return model
 
+#%%
+def pool_results(base_model):
+    inputs = base_model.outputs
+    pool_max = layers.GlobalMaxPooling1D()(inputs)
+    
+    model = Model(inputs = inputs, outputs = pool_max)
+    model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
+    
+    return model
 
+
+    
 #%%
     
 def add_fc_layers(base_model, mod_options):
@@ -257,6 +261,14 @@ def add_fc_layers(base_model, mod_options):
     
     inputs = base_model.output
     
+        #%%========== Global temporal pooling layer =========
+    pool_max = layers.GlobalMaxPooling1D()(inputs)
+    pool_average = layers.GlobalAveragePooling1D()(inputs)
+    pool_LP = layers.Lambda(lambda x:  GlobalLPPooling1D(x))(inputs)
+    
+    pool_time = layers.Concatenate()([pool_max, pool_average, pool_LP])
+    
+
 
     
     #%%========== FC Layers =========================
