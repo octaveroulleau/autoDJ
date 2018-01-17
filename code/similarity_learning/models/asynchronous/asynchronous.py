@@ -32,7 +32,7 @@ def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5)
     '''
     asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 5, shuffle = False)
     options = audioOptions
-    options.update({"metadata":audioSet.metaData})
+    options.update({"metadata":audioSet.metadata})
     asyncTask.createTask(audioSet.files, options)
 
     for epoch in range(nb_epochs):
