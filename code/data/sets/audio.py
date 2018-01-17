@@ -256,7 +256,7 @@ def importAudioData(curBatch, options):
     for it in range(len(options['transformType'])):
         transformString = transformString + '\'' + options["transformType"][it] + ((it < (len(options["transformType"]) - 1)) and '\',' or '\'}')
         print(transformString)
-        pause(0.5)
+        time.sleep(0.5)
         
     finalCommand = finalCommand + ' "transformType=' + transformString + '; oldRoot = \'' + options["dataDirectory"] +  '\'; newRoot = \'' + options["analysisDirectory"] + '\'';
     # Find the path of the current toolbox (w.r.t the launching path)
