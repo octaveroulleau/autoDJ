@@ -42,7 +42,7 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, batc
     options["audioSet"] = audioSet
     
     pdb.set_trace()
-    data_init = importAudioData(audioSet.files[0], options)
+    data_init, meta = importAudioData(audioSet.files[0], options)
     
     
     #base_model = build.build_conv_layers(nb_frames, )
