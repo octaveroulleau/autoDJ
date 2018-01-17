@@ -204,7 +204,7 @@ def build_conv_layers(frames, freq_bins, mod_options):
     if mod_options['batchNormConv']:
         conv_3 = layers.BatchNormalization()(conv_3)
     
-    model = Model(inputs = inputs, outputs = pool_time)
+    model = Model(inputs = inputs, outputs = conv_3)
     
     return model
 
