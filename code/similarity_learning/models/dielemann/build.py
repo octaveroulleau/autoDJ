@@ -327,7 +327,7 @@ mod_options = {
         'FC number': 2048,
         'batchNormDense': True,
         'Alphabet size': 10,
-        'Freeze layer': True}
+        'Freeze layer': False}
 
 base_model = build_conv_layers(599, 128, mod_options)
 

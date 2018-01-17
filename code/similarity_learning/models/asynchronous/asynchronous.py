@@ -30,7 +30,7 @@ def asyncTaskPointer(idx, dataIn, options):
 
     return data, meta
     
-def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5):
+def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, batch_size = 5, nb_epochs = 5):
     '''
     TO DO:
     -Define in call:  number of frames per chunk, type of model, model options
