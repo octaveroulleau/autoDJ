@@ -14,6 +14,7 @@ def asyncTaskPointer(idx, dataIn, options):
     print('loading'+ dataIn[idx])
     
     data, meta = importAudioData(dataIn, options)
+    meta = [idx, meta]
     return data, meta
     
 def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5):
@@ -31,7 +32,7 @@ def dummy_learn(currentData, currentMeta):
     print(len(currentData))
     # Simulate time
     for t in range(len(currentData)):
-        print('Learning on ID #' + str(currentMeta[t]) + " - 1st elt : " + str(currentData[t][1][1]))
+        print('Learning on ID #' + str(currentMeta[0])) #+ " - 1st elt : " + str(currentData[t][1][1]))
         for t2 in range(100):
             currentData[0] = currentData[0] + currentData[t];
     
