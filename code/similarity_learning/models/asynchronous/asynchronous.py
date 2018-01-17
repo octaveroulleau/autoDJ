@@ -54,7 +54,7 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, freq
         for batchIDx, (currentData, currentMeta) in enumerate(asyncTask):
             print('boucle')
             print('[Batch ' + str(batchIDx) + '] Learning step on ' + str(len(currentData)) + ' examples');
-            reshape_data(currentData[batchIdx], currentMeta, alphabet_size);
+            reshape_data(currentData[batchIDx], currentMeta, alphabet_size);
         print('Finished epoch #'+str(epoch))
     
     return 0#model_full, model_base
