@@ -33,8 +33,8 @@ from data.sets.audio import DatasetAudio
 #from matplotlib import pyplot as plt
 import skimage.transform as skt
 import numpy as np
-#import dielemann.build
-#import keras
+import dielemann.build
+import keras
 #from data_to_phrase import *
 
 
