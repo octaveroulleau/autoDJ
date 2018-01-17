@@ -19,12 +19,14 @@ def asyncTaskPointer(idx, dataIn, options):
     - Fix meta import
     '''
     audioSet = options['audioSet']
-    print('loading'+ dataIn[idx])
     
-    data, meta = importAudioData(dataIn, options)
     audioSet.importMetadataTasks();
     meta = audioSet.metadata['artist'][idx]
+ 
+    print('loading'+ dataIn[idx]+'\nIndex: '+str(idx)+'\nArtist: '+str(meta))
     meta = [idx, meta]
+    data, meta_trash = importAudioData(dataIn, options)
+
     return data, meta
     
 def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5):
@@ -34,7 +36,7 @@ def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5)
     -Add number of frames to audioOptions
     -Create model based on model options
     '''
-    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 5, shuffle = False)
+    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 5, shuffle = True)
     options = audioOptions
     options["audioSet"] = audioSet
     asyncTask.createTask(audioSet.files, options)
@@ -51,7 +53,6 @@ def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5)
 
 def dummy_learn(currentData, currentMeta):
     #currentData is size (audioSetSize,batchSize,freq,frames)
-    pdb.set_trace()
     print('Learning on current data - size :');
     print(len(currentData))
     # Simulate time
