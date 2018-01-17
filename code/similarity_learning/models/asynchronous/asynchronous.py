@@ -32,11 +32,10 @@ def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5)
     return 0
 
 def dummy_learn(currentData, currentMeta):
+    pdb.set_trace()
     print('Learning on current data - size :');
     print(len(currentData))
     # Simulate time
     for t in range(len(currentData)):
         print('Learning on ID #' + str(currentMeta[0])) #+ " - 1st elt : " + str(currentData[t][1][1]))
-        for t2 in range(100):
-            currentData[0] = currentData[0] + currentData[t];
     
