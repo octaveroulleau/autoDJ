@@ -16,6 +16,7 @@ import os
 # Package-specific import
 from . import generic as dat
 from . import utils as du
+import time
 
 """
 ###################################
@@ -254,6 +255,9 @@ def importAudioData(curBatch, options):
     transformString = "{";
     for it in range(len(options['transformType'])):
         transformString = transformString + '\'' + options["transformType"][it] + ((it < (len(options["transformType"]) - 1)) and '\',' or '\'}')
+        print(transformString)
+        pause(0.5)
+        
     finalCommand = finalCommand + ' "transformType=' + transformString + '; oldRoot = \'' + options["dataDirectory"] +  '\'; newRoot = \'' + options["analysisDirectory"] + '\'';
     # Find the path of the current toolbox (w.r.t the launching path)
     curPath = os.path.realpath(__file__)
