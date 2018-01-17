@@ -7,19 +7,34 @@ Created on Tue Jan 16 18:06:21 2018
 
 from similarity_learning.models.asynchronous.task import AsynchronousTask
 from data.sets.audio import DatasetAudio, importAudioData
+from similarity_learning.models.dielemann.build import *
 import pdb
 import time
 
 def asyncTaskPointer(idx, dataIn, options):
+    '''
+    TO DO
+    - Call track to chunk function and pass data and metadata through
+    - Fix meta import
+    '''
     print('loading'+ dataIn[idx])
     
     data, meta = importAudioData(dataIn, options)
-    meta = [idx, meta]
+    meta = options["artist"][idx]
     return data, meta
     
 def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5):
-    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 2, batchSize = 5, shuffle = False)
-    asyncTask.createTask(audioSet.files, audioOptions)
+    '''
+    TO DO:
+    -Define in call:  number of frames per chunk, type of model, model options
+    -Add number of frames to audioOptions
+    -Create model based on model options
+    '''
+    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 5, shuffle = False)
+    options = audioOptions
+    options.update({"metadata":audioSet.metaData})
+    asyncTask.createTask(audioSet.files, options)
+
     for epoch in range(nb_epochs):
         print('Epoch #' + str(epoch));
         for batchIDx, (currentData, currentMeta) in enumerate(asyncTask):
@@ -27,15 +42,14 @@ def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5)
             print('[Batch ' + str(batchIDx) + '] Learning step on ' + str(len(currentData)) + ' examples');
             dummy_learn(currentData, currentMeta);
         print('Finished epoch #'+str(epoch))
-        asyncTask.cleanTask();
     
-    return 0
+    return model_full, model_base
 
 def dummy_learn(currentData, currentMeta):
-    pdb.set_trace()
+    #currentData is size (audioSetSize,batchSize,freq,frames)
     print('Learning on current data - size :');
     print(len(currentData))
     # Simulate time
     for t in range(len(currentData)):
         print('Learning on ID #' + str(currentMeta[0])) #+ " - 1st elt : " + str(currentData[t][1][1]))
-    
+
