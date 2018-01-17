@@ -36,7 +36,7 @@ def dummy_learn(currentData, currentMeta):
     print(len(currentData))
     # Simulate time
     for t in range(len(currentData)):
-        print('Learning on ID #' + str(currentMeta[0][t])) #+ " - 1st elt : " + str(currentData[t][1][1]))
+        print('Learning on ID #' + str(currentMeta[0])) #+ " - 1st elt : " + str(currentData[t][1][1]))
         for t2 in range(100):
             currentData[0] = currentData[0] + currentData[t];
     
