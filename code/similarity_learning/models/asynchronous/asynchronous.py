@@ -7,7 +7,7 @@ Created on Tue Jan 16 18:06:21 2018
 
 from similarity_learning.models.asynchronous.task import AsynchronousTask
 from data.sets.audio import DatasetAudio, importAudioData
-from similarity_learning.models.dielemann.build import *
+#from similarity_learning.models.dielemann.build import *
 import pdb
 import time
 
@@ -43,10 +43,11 @@ def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5)
             dummy_learn(currentData, currentMeta);
         print('Finished epoch #'+str(epoch))
     
-    return model_full, model_base
+    return 0#model_full, model_base
 
 def dummy_learn(currentData, currentMeta):
     #currentData is size (audioSetSize,batchSize,freq,frames)
+    pdb.set_trace()
     print('Learning on current data - size :');
     print(len(currentData))
     # Simulate time
