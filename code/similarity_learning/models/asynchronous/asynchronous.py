@@ -8,6 +8,7 @@ Created on Tue Jan 16 18:06:21 2018
 from similarity_learning.models.asynchronous.task import AsynchronousTask
 from data.sets.audio import DatasetAudio, importAudioData
 import pdb
+import time
 
 def asyncTaskPointer(idx, dataIn, options):
     print('loading'+ dataIn[idx])
