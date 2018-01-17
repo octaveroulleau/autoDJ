@@ -26,7 +26,7 @@ def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5)
     
     return 0
 
-def dummyLearn(currentData, currentMeta):
+def dummy_learn(currentData, currentMeta):
     print('Learning on current data - size :');
     print(len(currentData))
     # Simulate time
