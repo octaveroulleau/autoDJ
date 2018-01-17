@@ -20,7 +20,7 @@ def asyncTaskPointer(idx, dataIn, options):
     print('loading'+ dataIn[idx])
     
     data, meta = importAudioData(dataIn, options)
-    meta = options["artist"][idx]
+    meta = options['metadata']['artist'][idx]
     return data, meta
     
 def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5):
