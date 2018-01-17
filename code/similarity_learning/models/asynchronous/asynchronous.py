@@ -12,7 +12,6 @@ import pdb
 import time
 
 def asyncTaskPointer(idx, dataIn, options):
-    pdb.set_trace()
     '''
     TO DO
     - Call track to chunk function and pass data and metadata through
@@ -22,6 +21,8 @@ def asyncTaskPointer(idx, dataIn, options):
     
     data, meta = importAudioData(dataIn, options)
     meta = options['metadata']['artist'][idx]
+    print(meta)
+    print(idx)
     return data, meta
     
 def asynchronous_learning(audioSet, audioOptions, batch_size = 5, nb_epochs = 5):
