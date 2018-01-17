@@ -11,7 +11,6 @@ from data.sets.audio import DatasetAudio, importAudioData
 import pdb
 import time
 
-audioSet.importMetadata
 
 def asyncTaskPointer(idx, dataIn, options):
     '''
