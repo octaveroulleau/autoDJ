@@ -102,7 +102,7 @@ def reshape_data(currentData, currentMeta, alphabet_size):
         data[i*5:i*5 +5] = currentData[i]
         meta[i*5:i*5 + 5] = currentMeta[i]
         
-        
+    pdb.set_trace()
     x_train = np.swapaxes(np.array(data),1,2)
     y_train = np.array(meta)
     y_train = keras.utils.to_categorical(y_train, alphabet_size)
