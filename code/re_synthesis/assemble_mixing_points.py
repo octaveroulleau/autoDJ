@@ -6,6 +6,7 @@ It uses the audio files : .au and their signal metadata (downbeat, tonality) to 
 For this, it adjusts tonality and tempo using a phase vocoder, then aligns beats and downbeats of both extracts
 """
 from similarity_learning.models.vae.piece_of_track import PieceOfTrack
+from re_synthesis.mixing_techniques import mix
 import librosa
 import numpy as np
 
@@ -46,26 +47,23 @@ def fetch_audio(mp_list):
     return tracklist
 
 
-def stack_tracks(tracklist):
+def mix_tracks(tracklist):
     """ Step 2
     Concatenation of tracks from the tracklist with stretching
     """
-    final_set = []
     tempo = 120
-    for piece in tracklist:
+    final_set = tracklist[0].render(tempo)[0]
+    for piece in tracklist[1:]:
         current = piece.render(tempo)
-        final_set = final_set + current[0]#data
+        data = current[0]
+        sr = current[1]
+        final_set = mix(final_set,data,'basic')
         
         
-    return final_set, current[1] #samplerate
+    return final_set, sr
 
 
-def mix_tracks(tracklist):
-    """ Step 2bis
-    Sort of OLA to transition between tracks at each mixing point
-    Constant gain.
-    """
-    ##TODO
+
 
 def compose_track(mp_list):
     """
@@ -75,7 +73,7 @@ def compose_track(mp_list):
     Returns the new audio track
     """
     tracklist = fetch_audio(mp_list)
-    final_set, sr = stack_tracks(tracklist)
+    final_set, sr = mix_tracks(tracklist)
     #final_set = mix_tracks(tracklist)
 
     return np.array(final_set), sr
