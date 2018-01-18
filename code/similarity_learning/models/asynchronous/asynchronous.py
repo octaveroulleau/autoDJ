@@ -34,7 +34,8 @@ def asyncTaskPointer(idx, dataIn, options):
     meta = []
     print('loading '+ dataIn[idx])
 
-    for i in chunks:
+    for i in range(len(chunks)):
+        print(chunks[i])
         chunk = i.get_cqt(audioSet, options, target_frames = 8000)
         print('Ok')
         data.append(chunk)
