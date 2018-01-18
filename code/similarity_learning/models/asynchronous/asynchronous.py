@@ -42,7 +42,7 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
     asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 5, shuffle = True)
     options = audioOptions
     options["audioSet"] = audioSet  
-    alphabet_size = len(set(audioSet.metadata["genre"]))
+    alphabet_size = len(set(audioSet.metadata["artist"]))
     
     model_options["Alphabet size"] = alphabet_size
     
