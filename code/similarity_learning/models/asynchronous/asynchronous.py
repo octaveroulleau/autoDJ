@@ -100,7 +100,7 @@ def reshape_data(currentData, currentMeta, alphabet_size):
     meta = np.zeros(((len(currentMeta))*5, currentMeta[0].shape[0]))
     for i in range(len(currentData)):
         data[i*5:i*5 +5] = currentData[i]
-        meta[i*6:(i+1)*6 - 1] = currentMeta[i]
+        meta[i*5:i*5 + 5] = currentMeta[i]
         
         
     x_train = np.swapaxes(np.array(data),1,2)
