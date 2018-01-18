@@ -110,7 +110,7 @@ def save_model(model_full,
               model_base,
               history,
               name,
-              pathmodel='similarity_learning/models/dielemann/models/'):
+              pathmodel='./similarity_learning/models/dielemann/models/'):
     '''
     Save a model (named with name and the actual date) in the required ./models
     directory.
@@ -144,7 +144,7 @@ def save_model(model_full,
     print('Base model saved in '+ filepath_full)
     
     print('Save history as ' + name + '_history_' + date + '...')
-    file = open('../dielemann/models/' + name + '_history_' + date)
+    file = open(pathmodel + name + '_history_' + date)
     pickle.dump(history.history, file)
     print('History saved in' + file)
     
