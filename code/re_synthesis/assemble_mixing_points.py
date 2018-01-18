@@ -1,12 +1,13 @@
 """ Module assemble.
 Mode normal (forward)
-These function aim at assembling audio chunks that, according to the VAE, can be played one after another with smooth transition.
-This module takes as input a list mixing points proposed by the VAE.
-The mixing points are an ordonned sequence of quadruplets (track1, time1, tempo1, track2, time2, tempo2).
+These function aim at assembling pieces of track that, according to the VAE, can be played one after another with smooth transition.
+This module takes as input a list of mixing points (see mixing_point.py) proposed by the VAE.
 It uses the audio files : .au and their signal metadata (downbeat, tonality) to produce an audio file that combine the chunks.
 For this, it adjusts tonality and tempo using a phase vocoder, then aligns beats and downbeats of both extracts
 """
-
+from similarity_learning.models.vae.piece_of_track import PieceOfTrack
+import librosa
+import numpy as np
 
 def fetch_audio(mp_list):
     """ Step 1
@@ -24,13 +25,13 @@ def fetch_audio(mp_list):
             cur_mp = mp_list[i]
 
             if (cur_mp.track1 != prev_mp.track2):
-                raise ValueError("Une track a été sautée")
+                raise ValueError("A track lost its way")
 
             beginning = prev_mp.time2
             end = cur_mp.time1
 
             if (beginning > end):
-                raise ValueError("Une track se finit avant de commencer...")
+                raise ValueError("A track ends before the beginning")
 
         except ValueError as error:
             print(error)
@@ -45,25 +46,28 @@ def fetch_audio(mp_list):
     return tracklist
 
 
-def stack_tracks(DATASET, tracklist):
+def stack_tracks(tracklist):
     """ Step 2
-    Concatenation of tracks from the tracklist without stretching
+    Concatenation of tracks from the tracklist with stretching
     """
     final_set = []
-    for track in tracklist:
-        final_set.append(track.render())
+    tempo = 120
+    for piece in tracklist:
+        current = piece.render(tempo)
+        final_set = final_set + current[0]#data
+        
+        
+    return final_set, current[1] #samplerate
 
-    return final_set
 
-
-def mix_tracks(DATASET, tracklist):
+def mix_tracks(tracklist):
     """ Step 2bis
     Sort of OLA to transition between tracks at each mixing point
     Constant gain.
     """
+    ##TODO
 
-
-def compose_track(DATASET, mp_list):
+def compose_track(mp_list):
     """
     Input : a list of mixing points
     Step 1 : fetch the audio 
@@ -71,12 +75,13 @@ def compose_track(DATASET, mp_list):
     Returns the new audio track
     """
     tracklist = fetch_audio(mp_list)
-    final_set = stack_tracks(DATASET, tracklist)
-    #final_set = mix_tracks(DATASET,tracklist)
+    final_set, sr = stack_tracks(tracklist)
+    #final_set = mix_tracks(tracklist)
 
-    return final_set
+    return np.array(final_set), sr
 
 
-def write_track(audio, filename):
+def write_track(audio, sr, filename = 'finalmix.wav'):
     """ Writes created track to a file
     """
+    librosa.output.write_wav(filename, audio, sr)
