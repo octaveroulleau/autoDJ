@@ -64,7 +64,7 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, freq
 def reshape_data(currentData, currentMeta, alphabet_size):
     #currentData is size (audioSetSize,batchSize,freq,frames)
     pdb.set_trace()
-    train_test = int((len(currentMeta)-1)*0.85)
+    train_test = int((len(currentMeta[1])-1)*0.85)
     x_train = np.swapaxes(np.array(currentData[:train_test]),1,2)
     y_train = np.array(currentMeta[:train_test])
     x_test = np.swapaxes(np.array(currentData[train_test:]),1,2)
