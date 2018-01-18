@@ -42,6 +42,7 @@ def asyncTaskPointer(idx, dataIn, options):
         nbBins = chunk.shape[0]
         print(chunk.shape[1])
         chunk = skt.resize(chunk, (nbBins, 100), mode='reflect')
+        print('resize ok')
         data.append(chunk)
         meta.append(chunks[i].get_meta(audioSet,options['task']))
         
