@@ -24,7 +24,7 @@ class TestNPZDataset(unittest.TestCase):
                               './dummyDataset/', 'Spectrums', 'labels')
         for i in range(5):
             data = dataset[i]
-            # print(i, data['image'], data['label'])
+            print(i, data['image'], data['label'])
         self.assertTrue(dataset != [])
 
     #---------------------------------------
