@@ -110,7 +110,7 @@ def save_model(model_full,
               model_base,
               history,
               name,
-              pathmodel='../dielemann/models'):
+              pathmodel='similarity_learning/models/dielemann/models/'):
     '''
     Save a model (named with name and the actual date) in the required ./models
     directory.
