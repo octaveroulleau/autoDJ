@@ -17,6 +17,6 @@ data = np.random.rand(nb_chunks,input_dim).astype('float32')
 # Feed to the VAE and return indexes of nearest chunks
 idx_nearest_chunks = vae_comp.compose_line(data)
 # From this, establish the list of mixing points
-mixing_points = chunks_to_mp(idx_nearest_chunks, chunks_list)
+# mixing_points = chunks_to_mp(idx_nearest_chunks, chunks_list)
 
 #%% Re-synthetize data (auto-DJ)

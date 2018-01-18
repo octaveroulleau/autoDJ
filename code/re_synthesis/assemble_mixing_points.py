@@ -5,7 +5,9 @@ This module takes as input a list of mixing points (see mixing_point.py) propose
 It uses the audio files : .au and their signal metadata (downbeat, tonality) to produce an audio file that combine the chunks.
 For this, it adjusts tonality and tempo using a phase vocoder, then aligns beats and downbeats of both extracts
 """
-from similarity_learning.models.vae.piece_of_track import PieceOfTrack
+import sys
+sys.path.append("similarity_learning/models/vae/")
+from piece_of_track import PieceOfTrack
 import librosa
 import numpy as np
 

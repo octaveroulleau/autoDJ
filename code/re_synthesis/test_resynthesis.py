@@ -1,14 +1,16 @@
 import sys
-sys.path.append("/Users/cyranaouameur/Desktop/ATIAM/PAM/Projet PAM/2017/autoDJ/code")
+sys.path.append("re_synthesis/")
+sys.path.append("similarity_learning/models/vae/")
+# sys.path.append("similarity_learning/")
 
 import os
 import librosa
 import numpy as np
-from similarity_learning.models.vae import mixing_point as mp
-from similarity_learning.models.vae import piece_of_track as pot
-from re_synthesis import assemble_mixing_points as re
+import mixing_point as mp    # from similarity_learning.models.vae 
+import piece_of_track as pot # from similarity_learning.models.vae 
+import assemble_mixing_points as re # from re_synthesis 
 
-DATA_PATH = "/Users/cyranaouameur/Desktop/ATIAM/PAM/Projet PAM/2017/autodj_sets/datasets/mixtest"
+DATA_PATH = "../../../autodj_sets/datasets/gtzan/data/au/hiphop/"
 DATA_NAMES = [DATA_PATH+'/'+f for f in os.listdir(DATA_PATH) if not f.startswith('.')]
 
 

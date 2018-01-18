@@ -27,7 +27,7 @@ def compose_line(data):
 	Then the line is discretized and the nearest neighbor of each point is selected.
 	"""
 	# Define constraints for composition
-	nb_chunks_total = 6
+	nb_chunks_mix = 6
 
 	# Load a pre-trained VAE
 	filepath = 'similarity_learning/models/vae/saved_models/test_spec_softplus.t7'
@@ -37,31 +37,33 @@ def compose_line(data):
 	x = Variable(torch.from_numpy(data))
 	x_params, z_params, z  = vae.forward(x)
 	embedded_data = z[-1].data.numpy()
-	print(embedded_data.shape)
 
 	# Random walk parameters : here, the parameters of a line.
+	# First select two random datapoints as support for the trajectory
 	dim_embedd_space = embedded_data.shape[1]
-	discrete_line = create_discrete_line(dim_embedd_space, nb_chunks_total)
-	print(discrete_line.shape)
+	nb_chunks_total = embedded_data.shape[0]
+	# TODO : Check que les 2 sont differents !!!
+	a = embedded_data[np.random.randint(nb_chunks_total),:]
+	b = embedded_data[np.random.randint(nb_chunks_total),:]
+	discrete_line = create_discrete_line(dim_embedd_space, nb_chunks_mix,a,b)
 	
 	# For each point of the line, find its nearest neighbor in the embedded dataset
 	idx_nearest_chunks = np.argmin(cdist(discrete_line,embedded_data),1) 
-	print(idx_nearest_chunks)
+	# test_create_line(nb_chunks_mix,a[:3],b[:3])
 	return idx_nearest_chunks
 
-def create_discrete_line(dim_embedd_space, nb_chunks_total):
-	line_a = np.random.randint(2, size=dim_embedd_space) # TUNE WITH REAL DATA
-	line_b = np.random.randint(2, size=dim_embedd_space) # TUNE WITH REAL DATA
-	line_b = np.transpose(np.tile(line_b,(nb_chunks_total,1)))
-	t = np.random.rand(nb_chunks_total) # sample nb_chunks_total points from the line
+def create_discrete_line(dim_embedd_space, nb_chunks_mix,a,b):
+	# From two points a and b, returns nb_chunks_mix datapoints belonging to the segment [a,b].
+	# Sample nb_chunks_mix points from the line
+	t = np.sort(np.random.rand(nb_chunks_mix))
 	t = np.tile(t,(dim_embedd_space,1))
-	discrete_line = line_a[:,np.newaxis]*t + line_b
+	discrete_line = a[:,np.newaxis]*t + b[:,np.newaxis]*(1-t)
 	discrete_line = np.transpose(discrete_line)
 	return discrete_line
 
-def test_create_line(nb_chunks_total):
+def test_create_line(nb_chunks_mix,a,b):
 	dim_embedd_space = 3
-	discrete_line = create_discrete_line(dim_embedd_space, nb_chunks_total)
+	discrete_line = create_discrete_line(dim_embedd_space, nb_chunks_mix,a,b)
 	fig = plt.figure()
 	ax = fig.add_subplot(111, projection='3d')
 	plt.scatter(discrete_line[0,:], discrete_line[1,:], discrete_line[2,:])
