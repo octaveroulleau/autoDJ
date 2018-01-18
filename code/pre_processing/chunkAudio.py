@@ -6,6 +6,8 @@ Chunk class definition
 @author: pierre-amaury
 """
 from data.sets.audio import importAudioData
+import skimage.transform as skt
+
 #%%
 
 class ChunkAudio():
@@ -18,7 +20,6 @@ class ChunkAudio():
         self.Fs = sampling_frequency
     
     def get_cqt(self, audioSet, audioOptions, target_frames = 4000):
-        import skimage.transform as skt
 
         file_cqt = [audioSet.files[self.track_id]]
         original_cqt, trash = importAudioData(file_cqt, audioOptions)
