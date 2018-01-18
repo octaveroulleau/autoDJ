@@ -79,6 +79,7 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
     model_base = build.build_conv_layers(nb_frames, freq_bins, model_options)
     model_full = build.add_fc_layers(model_base, model_options)
     
+    history_list = {}
 
     for epoch in range(nb_epochs):
         asyncTask.createTask(audioSet.files, options)
@@ -88,9 +89,15 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
             print('[Batch ' + str(batchIDx) + '] Learning step on ' + str(len(currentData[batchIDx])) + ' examples');
             x_train, y_train = reshape_data(currentData, currentMeta, alphabet_size);
             history = model_full.fit(x_train, y_train, batch_size = batch_size, epochs = 1, verbose = 1, validation_split = 0.2)
+            history_list['epoch '+str(epoch)+' batch '+str(batchIDx)] = history.history
+            x_train = 0
+            y_train = 0
+            currentData = 0
+            currentMeta = 0
+            
         print('Finished epoch #'+str(epoch))
     
-    save_model(model_full, model_base, history, model_name)
+    save_model(model_full, model_base, history_list, model_name)
     return 0#model_full, model_base
 
 def reshape_data(currentData, currentMeta, alphabet_size):
@@ -145,7 +152,7 @@ def save_model(model_full,
     
     print('Save history as ' + name + '_history_' + date + '...')
     file = open(pathmodel + name + '_history_' + date)
-    pickle.dump(history.history, file)
+    pickle.dump(history, file)
     print('History saved in' + file)
     
     
