@@ -1,5 +1,5 @@
 import torch
-import tensorflow
+import tensorflow as tf
 import keras
 import data
 from similarity_learning.models.asynchronous.asynchronous import asynchronous_learning
