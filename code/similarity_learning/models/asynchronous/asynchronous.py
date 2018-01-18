@@ -36,10 +36,10 @@ def asyncTaskPointer(idx, dataIn, options):
 
     for i in range(len(chunks)):
         print(chunks[i])
-        #chunk = chunks[i].get_cqt(audioSet, options, target_frames = 8000)
+        chunk = chunks[i].get_cqt(audioSet, options, target_frames = 100)
         print('Ok')
-        data.append(chunks[i])
-        meta.append(chunks[i].get_meta(options['task']))
+        data.append(chunk)
+        meta.append(chunks[i].get_meta(audioSet,options['task']))
         
     print(str(len(data)) + ' chunks created')
 
