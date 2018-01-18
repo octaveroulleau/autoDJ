@@ -67,7 +67,7 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
     -Add number of frames to audioOptions
     -Create model based on model options
     '''
-    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 5, shuffle = True)
+    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 1, batchSize = 5, shuffle = True)
     options = audioOptions
     options["audioSet"] = audioSet  
     options["task"] = task
