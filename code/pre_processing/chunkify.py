@@ -17,7 +17,6 @@ def track_to_chunks(track_id, Fs, downbeat):
     downbeat : array of int
     """
     chunks = [] # future list of chunks
-    pdb.set_trace()
     
     for i in range(len(downbeat)-1):
         echantillon_debut = int(round(downbeat[i]*Fs))
