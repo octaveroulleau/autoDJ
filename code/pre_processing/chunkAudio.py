@@ -9,7 +9,7 @@ Chunk class definition
 class ChunkAudio():
     
     # methods
-    def __init__(self, sampling_frequency, original_track_id , echantillon_debut , echantillon_fin):
+    def __init__(self, sampling_frequency, original_track_id, echantillon_debut , echantillon_fin):
         self.track_id = original_track_id
         self.ech_debut = echantillon_debut
         self.ech_fin = echantillon_fin    
@@ -27,8 +27,9 @@ class ChunkAudio():
         chunk_cqt = original_cqt[:, int(frame_deb):int(frame_fin)]
         return chunk_cqt
         
-    def get_raw_audio():
-        return raw_audio
+    def get_raw_audio_path(self, audioSet):
+        raw_audio_path = audioSet.files[self.track_id]
+        return raw_audio_path
     
     def get_tempo(self, audioSet):
         chunk_tempo = audioSet.metadata["tempo"][self.track_id]
