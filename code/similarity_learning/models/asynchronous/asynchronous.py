@@ -94,10 +94,17 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
     return 0#model_full, model_base
 
 def reshape_data(currentData, currentMeta, alphabet_size):
-    #currentData is size (audioSetSize,batchSize,freq,frames)
+    #currentData is size (nb_chunks,batchSize,freq,frames)
     pdb.set_trace()
-    x_train = np.swapaxes(np.array(currentData),1,2)
-    y_train = np.array(currentMeta)
+    data = np.zeros((len(currentData)*5, currentData[0].shape[1], currentData[0].shape[2]))
+    meta = np.zeros((len(currentMeta))*5, currentMeta[0].shape[0])
+    for i in range(len(currentData)):
+        data[i*len(currentData):(i+1)*len(currentData) - 1] = currentData[i]
+        meta[i*len(currentData):(i+1)*len(currentData) - 1] = currentMeta[i]
+        
+        
+    x_train = np.swapaxes(np.array(data),1,2)
+    y_train = np.array(meta)
     y_train = keras.utils.to_categorical(y_train, alphabet_size)
     return x_train, y_train
 
