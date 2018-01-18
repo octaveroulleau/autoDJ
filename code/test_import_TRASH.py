@@ -16,4 +16,5 @@ mod_options = {
         'batchNormDense': True,
         'Alphabet size': 10,
         'Freeze layer': False}
-asynchronous_learning(audioSet, audioOptions, nb_frames, mod_options)
+model_name = 'test'
+asynchronous_learning(audioSet, audioOptions, nb_frames, mod_options, model_name)
