@@ -151,9 +151,10 @@ def save_model(model_full,
     print('Base model saved in '+ filepath_full)
     
     print('Save history as ' + name + '_history_' + date + '...')
-    file = open(pathmodel + name + '_history_' + date, 'wb')
+    filename_history = pathmodel + name + '_history_' + date
+    file = open(filename_history, 'wb')
     pickle.dump(history, file)
-    print('History saved in' + file)
+    print('History saved in' + filename_history)
     
     
     
