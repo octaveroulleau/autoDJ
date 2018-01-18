@@ -142,6 +142,7 @@ def save_model(model_full,
     date = date.replace(':', '-')
     print('Save base model as ' + name + '_base_' + date + '.h5' + '...')
     filepath_base = pathmodel + name + '_base_' + date + '.h5'
+    file_base = open(filepath_base, 'w')
     model_base.save(filepath_base)
     print('Base model saved in '+ filepath_base)
 
