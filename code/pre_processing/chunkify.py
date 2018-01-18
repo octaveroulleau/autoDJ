@@ -6,7 +6,9 @@ Functions to create chunks from whole tracks
 @author: pierre-amaury
 """
 
-import chunkAudio as ca
+import pre_processing.chunkAudio as ca
+import pdb
+import skimage.transform as skt
 
 def track_to_chunks(track_id, Fs, downbeat):
     """
@@ -15,8 +17,9 @@ def track_to_chunks(track_id, Fs, downbeat):
     downbeat : array of int
     """
     chunks = [] # future list of chunks
+    pdb.set_trace()
     
-    for i in range(downbeat.size-1):
+    for i in range(len(downbeat)-1):
         echantillon_debut = int(round(downbeat[i]*Fs))
         echantillon_fin = int(round(downbeat[i+1]*Fs))
         

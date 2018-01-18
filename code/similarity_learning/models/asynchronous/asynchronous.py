@@ -14,6 +14,8 @@ import similarity_learning.models.dielemann.build as build
 import numpy as np
 import keras
 import pickle
+from pre_processing.chunkify import track_to_chunks
+
 
 
 def asyncTaskPointer(idx, dataIn, options):
@@ -24,15 +26,33 @@ def asyncTaskPointer(idx, dataIn, options):
     '''
     audioSet = options['audioSet']
     
+    downbeat = audioSet.metadata["downbeat"][idx][0]
+    Fs = 44100
+    chunks = track_to_chunks(idx, Fs, downbeat)
+    
+    data = []
+    meta = []
+    for i in chunks:
+        data.append(i.get_cqt(audioSet, options, target_frames = 8000))
+        meta.append(i.get_meta(options['task']))
+        
+        
+    
+    """
+    audioSet = options['audioSet']
+    
     audioSet.importMetadataTasks();
-    meta = audioSet.metadata['artist'][idx]
+    meta = audioSet.metadata[options["task"]][idx]
  
-    print('loading'+ dataIn[idx]+'\nIndex: '+str(idx)+'\nArtist: '+str(meta))
+    print('loading '+ dataIn[idx])
     data, meta_trash = importAudioData(dataIn, options)
+    
+    #chunks, chunks_meta = Chunks
+    """
 
     return data, meta
     
-def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, model_name, freq_bins = 168, batch_size = 5, nb_epochs = 5):
+def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, model_name, task = "genre", freq_bins = 168, batch_size = 5, nb_epochs = 5):
     '''
     TO DO:
     -Define in call:  number of frames per chunk, type of model, model options
@@ -42,12 +62,14 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
     asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 4, batchSize = 5, shuffle = True)
     options = audioOptions
     options["audioSet"] = audioSet  
-    alphabet_size = len(set(audioSet.metadata["artist"]))
+    options["task"] = task
+    options["frames number"] = nb_frames
+    alphabet_size = len(set(audioSet.metadata[task]))
     
     model_options["Alphabet size"] = alphabet_size
     
-    base_model = build.build_conv_layers(nb_frames, freq_bins, model_options)
-    full_layer = build.add_fc_layers(base_model, model_options)
+    model_base = build.build_conv_layers(nb_frames, freq_bins, model_options)
+    model_full = build.add_fc_layers(model_base, model_options)
     
 
     for epoch in range(nb_epochs):
@@ -55,26 +77,23 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
         print('Epoch #' + str(epoch));
         for batchIDx, (currentData, currentMeta) in enumerate(asyncTask):
             print('boucle')
-            print('[Batch ' + str(batchIDx) + '] Learning step on ' + str(len(currentData)) + ' examples');
-            reshape_data(currentData[batchIDx], currentMeta, alphabet_size);
+            print('[Batch ' + str(batchIDx) + '] Learning step on ' + str(len(currentData[batchIDx])) + ' examples');
+            x_train, x_test = reshape_data(currentData[batchIDx], currentMeta, alphabet_size);
+            #history = model_full.fit(x_train, y_train, batch_size = batchSize, epochs = 1, verbose = 1, validation_split = 0.2)
         print('Finished epoch #'+str(epoch))
     
+    #save_model(model_full, model_base, history, model_name)
     return 0#model_full, model_base
 
 def reshape_data(currentData, currentMeta, alphabet_size):
     #currentData is size (audioSetSize,batchSize,freq,frames)
     pdb.set_trace()
-    train_test = int((len(currentMeta)-1)*0.85)
-    x_train = np.swapaxes(np.array(currentData[:train_test]),1,2)
-    y_train = np.array(currentMeta[:train_test])
-    x_test = np.swapaxes(np.array(currentData[train_test:]),1,2)
-    y_test = np.array(currentMeta[train_test:])
+    x_train = np.swapaxes(np.array(currentData),1,2)
+    y_train = np.array(currentMeta)
     y_train = keras.utils.to_categorical(y_train, alphabet_size)
-    y_test = keras.utils.to_categorical(y_test, alphabet_size)
-    
-    return x_train, y_train, x_test, y_test
+    return x_train, y_train
 
-def SaveModel(model_full,
+def save_model(model_full,
               model_base,
               name,
               history,
