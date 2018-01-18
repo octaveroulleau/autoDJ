@@ -97,7 +97,7 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
 def reshape_data(currentData, currentMeta, alphabet_size):
     #currentData is size (nb_chunks,batchSize,freq,frames)
     data = np.zeros(((len(currentData))*5, currentData[0].shape[1], currentData[0].shape[2]))
-    meta = np.zeros(((len(currentMeta))*5, currentMeta[0].shape[0]))
+    meta = np.zeros((len(currentMeta))*5)
     for i in range(len(currentData)):
         data[i*5:i*5 +5] = currentData[i]
         meta[i*5:i*5 + 5] = currentMeta[i]
