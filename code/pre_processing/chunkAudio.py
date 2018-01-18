@@ -30,6 +30,7 @@ class ChunkAudio():
         
         frame_deb = self.ech_debut*nb_frames/float(self.Fs*track_len)
         frame_fin = self.ech_fin*nb_frames/float(self.Fs*track_len)
+        print('Seg Ok')
 
 #        return frame_deb, frame_fin        
         chunk_cqt = original_cqt[:, int(frame_deb):int(frame_fin)]
