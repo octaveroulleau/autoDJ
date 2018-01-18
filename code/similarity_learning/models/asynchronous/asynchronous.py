@@ -15,6 +15,7 @@ import numpy as np
 import keras
 import pickle
 from pre_processing.chunkify import track_to_chunks
+import skimage.transform as skt
 
 
 
@@ -36,8 +37,9 @@ def asyncTaskPointer(idx, dataIn, options):
 
     for i in range(len(chunks)):
         print(chunks[i])
-        chunk = chunks[i].get_cqt(audioSet, options, target_frames = 100)
+        chunk = chunks[i].get_cqt(audioSet, options)
         print('Ok')
+        chunk = skt.resize(chunk, (nbBins, 100), mode='reflect')
         data.append(chunk)
         meta.append(chunks[i].get_meta(audioSet,options['task']))
         

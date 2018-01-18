@@ -19,23 +19,22 @@ class ChunkAudio():
         self.ech_fin = echantillon_fin    
         self.Fs = sampling_frequency
     
-    def get_cqt(self, audioSet, audioOptions, target_frames = 100):
+    def get_cqt(self, audioSet, audioOptions):
 
         file_cqt = [audioSet.files[self.track_id]]
         original_cqt, trash = importAudioData(file_cqt, audioOptions)
         original_cqt = original_cqt[0]
-        print('Import ok')
+
         nbBins, nb_frames = original_cqt.shape[0], original_cqt.shape[1]
         track_len = 30 #in seconds
         
         frame_deb = self.ech_debut*nb_frames/float(self.Fs*track_len)
         frame_fin = self.ech_fin*nb_frames/float(self.Fs*track_len)
-        print('Seg Ok')
+
 
 #        return frame_deb, frame_fin        
         chunk_cqt = original_cqt[:, int(frame_deb):int(frame_fin)]
-        #resample cqt to nb_frames
-        chunk_cqt = skt.resize(chunk_cqt, (nbBins, target_frames), mode='reflect')
+        
         
         return chunk_cqt
     
