@@ -90,7 +90,7 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
             history = model_full.fit(x_train, y_train, batch_size = batch_size, epochs = 1, verbose = 1, validation_split = 0.2)
         print('Finished epoch #'+str(epoch))
     
-    #save_model(model_full, model_base, history, model_name)
+    save_model(model_full, model_base, history, model_name)
     return 0#model_full, model_base
 
 def reshape_data(currentData, currentMeta, alphabet_size):
