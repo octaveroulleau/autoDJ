@@ -96,10 +96,10 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
 def reshape_data(currentData, currentMeta, alphabet_size):
     #currentData is size (nb_chunks,batchSize,freq,frames)
     pdb.set_trace()
-    data = np.zeros((len(currentData)*6, currentData[0].shape[1], currentData[0].shape[2]))
-    meta = np.zeros((len(currentMeta)*6, currentMeta[0].shape[0]))
+    data = np.zeros(((len(currentData))*5, currentData[0].shape[1], currentData[0].shape[2]))
+    meta = np.zeros(((len(currentMeta))*5, currentMeta[0].shape[0]))
     for i in range(len(currentData)):
-        data[i*6:(i+1)*6 - 1] = currentData[i]
+        data[i*5:i*5 +5] = currentData[i]
         meta[i*6:(i+1)*6 - 1] = currentMeta[i]
         
         
