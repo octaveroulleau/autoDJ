@@ -108,8 +108,8 @@ def reshape_data(currentData, currentMeta, alphabet_size):
 
 def save_model(model_full,
               model_base,
-              name,
               history,
+              name,
               pathmodel='../dielemann/models'):
     '''
     Save a model (named with name and the actual date) in the required ./models
