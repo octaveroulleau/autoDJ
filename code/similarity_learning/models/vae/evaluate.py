@@ -6,6 +6,9 @@
 
 # Use toymix !!! (chunk by chunk)
 
+import sys
+sys.path.append('similarity_learning/models/vae/')
+
 import numpy as np
 import visualize.plot_vae.dimension_reduction as dr
 import VAE
@@ -42,5 +45,5 @@ filepath = 'similarity_learning/models/vae/saved_models/test_spec_softplus.t7'
 vae = VAE.load_vae(filepath)
 
 #%% Plotting and dimension reduction
-dr.plot_latent2(data, vae, n_points=2000, method=dr.latent_pca, layer=0, write="pca") #, labels=labels
+dr.plot_latent2(data, vae, n_points=2000, method=dr.latent_pca, layer=0, write="pca") #, labels=labels, method=dr.latent_tsne (plus lent)
 #dr.plot_latent3(dataset, vae, n_points=10000, method=dr.latent_pca, task="class", layer=1)

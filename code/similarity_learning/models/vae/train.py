@@ -17,6 +17,9 @@
 
 # Save obtained vae to saved_models
 
+import sys
+sys.path.append('similarity_learning/models/vae/')
+
 import VAE
 import numpy as np
 
