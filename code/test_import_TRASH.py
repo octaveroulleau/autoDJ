@@ -10,7 +10,7 @@ audioSet, audioOptions = data.import_data.import_data()
 #%%
 transform_type, transform_options = audioSet.getTransforms()
 audioSet.files = audioSet.files[0:300]
-nb_frames = 4000
+nb_frames = 100
 mod_options = {
         'activation': 'relu',
         'batchNormConv': True,
