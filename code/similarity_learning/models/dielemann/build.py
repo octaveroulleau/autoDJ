@@ -210,7 +210,7 @@ def build_conv_layers(frames, freq_bins, mod_options):
 
 #%%
 def pool_results(base_model):
-    inputs = base_model.outputs
+    inputs = base_model.output
     pool_max = layers.GlobalMaxPooling1D()(inputs)
     
     model = Model(inputs = inputs, outputs = pool_max)
