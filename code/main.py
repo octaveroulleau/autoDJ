@@ -84,7 +84,7 @@ for file_id in range(5):
     x_embed = []
     
     for i in range(data_out.shape[0]):
-         x_embed.append(TSNE().fit_transform(data_out[i].reshape(1,-1)))
+         x_embed.append(TSNE().fit_transform(data_out[i].reshape(-1,1)))
     X_embed.append(x_embed)
     
 filename = './tsne'
