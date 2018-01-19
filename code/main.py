@@ -16,6 +16,8 @@ from pre_processing.chunkify import track_to_chunks
 import skimage.transform as skt
 from data.sets.audio import DatasetAudio, importAudioData
 import numpy as np
+import os
+import pickle
 #%%
 
 config = tf.ConfigProto()
@@ -44,34 +46,37 @@ model_base, model_options = similarity_learning.models.dielemann.load.load_CNN_m
 
 
 #%%
-file = audioSet.files[0]
-downbeat = audioSet.metadata['downbeat'][0][0]
-Fs = 44100
-chunks = track_to_chunks(0, Fs, downbeat)
+for file_id in range(len(20)):
+    file = audioSet.files[file_id]
+    downbeat = audioSet.metadata['downbeat'][file_id][0]
+    Fs = 44100
+    chunks = track_to_chunks(file_id, Fs, downbeat)
+    data = []
+    meta = []
 
-data = []
-meta = []
-
-#print('loading '+ dataIn[idx
-for i in range(len(chunks)):
-    chunk = chunks[i].get_cqt(audioSet, audioOptions)
-    nbBins = chunk.shape[0]
-    chunk = skt.resize(chunk, (nbBins, 100), mode='reflect')
-    data.append(chunk)
-    meta.append(chunks[i].get_meta(audioSet,'genre'))
-
-
-x = np.zeros((len(data), data[0].shape[0], data[0].shape[1]))
-for i in range(len(data)):
-    x[i] = data[i]
-x = np.swapaxes(np.array(data),1,2)
+    #print('loading '+ dataIn[idx
+    for i in range(len(chunks)):
+        chunk = chunks[i].get_cqt(audioSet, audioOptions)
+        nbBins = chunk.shape[0]
+        chunk = skt.resize(chunk, (nbBins, 100), mode='reflect')
+        data.append(chunk)
+        meta.append(chunks[i].get_meta(audioSet,'genre'))
 
 
+    x = np.zeros((len(data), data[0].shape[0], data[0].shape[1]))
+    for i in range(len(data)):
+        x[i] = data[i]
+    x = np.swapaxes(np.array(data),1,2)
+
+    data_out = model_base.predict(x, verbose = 1)
     
-data_out = model_base.predict(x, verbose = 1)
+    file_dir = '../../../autoDJ_sets/datasets/gtzan/CNN/'+model_name+'/'
+    
+    if not os.path.exists(file_dir):
+        os.mkdir(file_dir)
+    pickle.dump(open(file_dir+'file_no_'+str(file_id), 'wb'), data_out)
 
 
-print(len(data_out))
 # Feed the data to the VAE
 
 # Re-synthetize data (auto-DJ)
