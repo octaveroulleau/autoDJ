@@ -1,10 +1,11 @@
 """ Module assemble.
-Mode normal (forward)
-These function aim at assembling pieces of track that, according to the VAE, can be played one after another with smooth transition.
+Mode normal (forward/compose/mix)
+These function aim at assembling pieces of tracks that, according to the VAE, can be played one after another with smooth transition.
 This module takes as input a list of mixing points (see mixing_point.py) proposed by the VAE.
 It uses the audio files : .au and their signal metadata (downbeat, tonality) to produce an audio file that combine the chunks.
 For this, it adjusts tonality and tempo using a phase vocoder, then aligns beats and downbeats of both extracts
 """
+
 import sys
 sys.path.append("similarity_learning/models/vae/")
 from piece_of_track import PieceOfTrack
@@ -14,8 +15,24 @@ import numpy as np
 def fetch_audio(mp_list):
     """ Step 1
     From the mixing points list, loads the audio and metadata relative to each interval between two mixing points.
-    Returns a list of track (see track.py class) objects : tracklist
+
+    Parameters
+    ----------
+    mp_list : list of mixing points (see mixing_point.py)
+        Defines the future mix.
+
+    Returns
+    -------
+    tracklist : list of track (see vae/piece_of_track.py class) objects
+        Audio objects.
+
+    Example
+    -------
+
+    tracklist = fetch_audio(mp_list)
+
     """
+
     first_track = PieceOfTrack(mp_list[0].track1, 0, mp_list[
                         0].time1, mp_list[0].tempo1)
     tracklist = [first_track]
@@ -49,41 +66,114 @@ def fetch_audio(mp_list):
 
 
 def stack_tracks(tracklist):
-    """ Step 2
-    Concatenation of tracks from the tracklist with stretching
+    """ Step 2 : Concatenation of tracks from the tracklist with stretching
+    
+    Parameters
+    ----------
+    tracklist : list of track (see vae/piece_of_track.py class) objects
+        Audio objects suitable to librosa.
+
+    Returns
+    -------
+    final_set : librosa audio object
+        Represents the final mix.
+    sr : int
+        The sample rate of the mix.
+
+    Example
+    -------
+
+    final_set, sr = stack_tracks(tracklist)
+
     """
+
     final_set = []
     tempo = 120
     for piece in tracklist:
         current = piece.render(tempo)
-        final_set = final_set + current[0]#data
+        final_set = final_set + current[0] #data
         
-        
-    return final_set, current[1] #samplerate
+    sr = current[1] #samplerate
+    return final_set, sr
 
 
 def mix_tracks(tracklist):
-    """ Step 2bis
-    Sort of OLA to transition between tracks at each mixing point
-    Constant gain.
+    """ Step 2bis : Sort of OLA to transition between tracks at each mixing point
+
+    Parameters
+    ----------
+    tracklist : list of track (see vae/piece_of_track.py class) objects
+        Audio objects suitable to librosa.
+
+    Returns
+    -------
+    final_set : librosa audio object
+        Represents the final mix.
+
+    Example
+    -------
+
+    final_set = mix_tracks(tracklist)
+    
     """
+
+    # Constant gain.
     ##TODO
+    final_set = []
+    return final_set
 
 def compose_track(mp_list):
-    """
-    Input : a list of mixing points
-    Step 1 : fetch the audio 
-    Step 2 : mix the tracks and merge
-    Returns the new audio track
-    """
-    tracklist = fetch_audio(mp_list)
-    final_set, sr = stack_tracks(tracklist)
-    #final_set = mix_tracks(tracklist)
+    """ Assembles the new mix by calling the previous functions in the right order.
+    
+    Parameters
+    ----------
+    mp_list : list of mixing points (see mixing_point.py)
+        Defines the future mix.
+    
+    Returns
+    -------
+    final_set : librosa audio object
+        Represents the final mix.
+    sr : int
+        The sample rate of the mix.
+    
+    Example
+    -------
 
-    return np.array(final_set), sr
+    finalset, sr = compose_track(mp_list)
+
+    """
+
+    # Step 1 : fetch the audio 
+    tracklist = fetch_audio(mp_list)
+    # Step 2 : mix the tracks and merge
+    concat_set, sr = stack_tracks(tracklist)
+    #final_set = mix_tracks(concat_set)
+
+    return np.array(concat_set), sr
 
 
 def write_track(audio, sr, filename = 'finalmix.wav'):
     """ Writes created track to a file
+    
+    Parameters
+    ----------
+    audio : librosa audio object
+        Represents the final mix.
+    sr : int
+        The sample rate of the mix.
+    filename : str
+        The path to write the audio file to (as '.wav')
+
+    Returns
+    -------
+    None. Writes the output to disk.
+
+    Example
+    -------
+
+    write_track(np.array(finalset),sr)
+
     """
+
     librosa.output.write_wav(filename, audio, sr)

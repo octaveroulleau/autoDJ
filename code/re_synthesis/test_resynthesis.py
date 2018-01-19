@@ -21,9 +21,9 @@ mp3 = mp.MixingPoint(DATA_NAMES[2],300000,90,DATA_NAMES[3],150000,150)
 mp4 = mp.MixingPoint(DATA_NAMES[3],190000,150,DATA_NAMES[4],600000,110)
 mp_list = [mp1,mp2,mp3,mp4]
 
-#finalset, sr = re.compose_track(mp_list)
-tracklist = re.fetch_audio(mp_list)
-finalset, sr = re.stack_tracks(tracklist)
+finalset, sr = re.compose_track(mp_list)
+# tracklist = re.fetch_audio(mp_list)
+# finalset, sr = re.stack_tracks(tracklist)
 re.write_track(np.array(finalset),sr)
 
 
