@@ -113,8 +113,9 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
             val_loss = 0
 
             for i in range(int(np.floor(len(audioSet.files)/batch_size))):
-                val_loss_saved = val_loss_saved + history_list_saved["epoch "+str(epoch_saved)+" batch "+str(i)]['val_loss'][0]
-                val_loss = val_loss + history_list["epoch "+str(epoch)+" batch "+str(i)]['val_loss'][0]
+                if "epoch"+str(epoch_saved)+" batch "+str(i) in history_list_saved and "epoch"+str(epoch)+" batch "+str(i) in history_list:
+                    val_loss_saved = val_loss_saved + history_list_saved["epoch "+str(epoch_saved)+" batch "+str(i)]['val_loss'][0]
+                    val_loss = val_loss + history_list["epoch "+str(epoch)+" batch "+str(i)]['val_loss'][0]
             if val_loss_saved < val_loss:
                 wait_time = wait_time + 1
                 print("wait time: "+str(wait_time))
