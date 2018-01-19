@@ -53,7 +53,7 @@ meta = []
 data_out = []
 #print('loading '+ dataIn[idx
 for i in range(len(chunks)):
-    chunk = chunks[i].get_cqt(audioSet, options)
+    chunk = chunks[i].get_cqt(audioSet, audioOptions)
     nbBins = chunk.shape[0]
     chunk = skt.resize(chunk, (nbBins, 100), mode='reflect')
     data.append(chunk)
