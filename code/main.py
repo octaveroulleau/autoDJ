@@ -36,10 +36,9 @@ mod_options = {
         'Freeze layer': False,
         'batch size': batch_size}
 model_name = 'genre_full'
-
 model_base, model_options = similarity_learning.models.dielemann.load.load_CNN_model(model_name)
-pdb.set_trace()
-
+print(model_base)
+print(len(model_options))
 # Feed the data to the VAE
 
 # Re-synthetize data (auto-DJ)

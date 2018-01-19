@@ -218,7 +218,7 @@ def pool_results(base_model):
     
     model = Model(inputs = inputs, outputs = pool_max)
     model_pool = model([base_model.output])
-    model_pool.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
+    model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
     
     return model
 
