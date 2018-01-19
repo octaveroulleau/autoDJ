@@ -60,7 +60,7 @@ def asyncTaskPointer(idx, dataIn, options):
 
     return data, meta
     
-def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, model_name, task = "genre", freq_bins = 168, batch_size = 10, nb_epochs = 1000):
+def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, model_name, task = "genre", freq_bins = 168, batch_size = 10, nb_epochs = 5):
     '''
     TO DO:
     -Define in call:  number of frames per chunk, type of model, model options
@@ -126,7 +126,7 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
             break
                 
                     
-    save_model(model_full_saved, model_base_saved, history_list_saved, model_name)
+    save_model(model_full_saved, model_base_saved, model_options, history_list_saved, model_name)
     return 0#model_full, model_base
 
 def reshape_data(currentData, currentMeta, alphabet_size):
@@ -145,6 +145,7 @@ def reshape_data(currentData, currentMeta, alphabet_size):
 
 def save_model(model_full,
               model_base,
+              model_options,
               history,
               name,
               pathmodel='./similarity_learning/models/dielemann/models/'):
@@ -170,6 +171,7 @@ def save_model(model_full,
     filepath_base = pathmodel + name + '_base.h5'
     filepath_full = pathmodel + name + '_full.h5'
     filename_history = pathmodel + name + '_history'
+    filename_options = pathmodel + name + '_options'
 
     try:
         f = open(filepath_base, 'rb')
@@ -185,9 +187,16 @@ def save_model(model_full,
             print('Base model saved in '+ filepath_full)
             
             print('Save history as ' + name + '_history...')
-            file = open(filename_history, 'wb')
-            pickle.dump(history, file)
+            file_history = open(filename_history, 'wb')
+            pickle.dump(history, file_history)
             print('History saved in' + filename_history)
+            
+            print('Save options as ' + name + '_options ...')
+            file_options = open(filename_options, 'wb')
+            pickle.dump(model_options, file_options)
+            
+            file_history.close()
+            file_options.close()
             
             
         else:
@@ -207,10 +216,16 @@ def save_model(model_full,
                 print('Base model saved in '+ filepath_full)
                 
                 print('Save history as ' + name + '_history...')
-                file = open(filename_history, 'wb')
-                pickle.dump(history, file)
+                file_history = open(filename_history, 'wb')
+                pickle.dump(history, file_history)
                 print('History saved in' + filename_history)
-                file.close()
+                
+                print('Save options as ' + name + '_options ...')
+                file_options = open(filename_options, 'wb')
+                pickle.dump(model_options, file_options)
+                
+                file_history.close()
+                file_options.close()
             else:
                 print('Model not saved')
     except IOError:
@@ -223,9 +238,16 @@ def save_model(model_full,
         print('Base model saved in '+ filepath_full)
         
         print('Save history as ' + name + '_history...')
-        file = open(filename_history, 'wb')
-        pickle.dump(history, file)
+        file_history = open(filename_history, 'wb')
+        pickle.dump(history, file_history)
         print('History saved in' + filename_history)
+        
+        print('Save options as ' + name + '_options ...')
+        file_options = open(filename_options, 'wb')
+        pickle.dump(model_options, file_options)
+        
+        file_history.close()
+        file_options.close()
         pass
         
 

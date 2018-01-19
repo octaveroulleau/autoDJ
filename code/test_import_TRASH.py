@@ -15,7 +15,8 @@ set_session(tf.Session(config=config))
 audioSet, audioOptions = data.import_data.import_data()
 #%%
 transform_type, transform_options = audioSet.getTransforms()
-audioSet.files = audioSet.files[0:10]
+audioSet.files = audioSet.files
+batch_size = 20
 nb_frames = 100
 mod_options = {
         'activation': 'relu',
@@ -23,6 +24,7 @@ mod_options = {
         'FC number': 2048,
         'batchNormDense': True,
         'Alphabet size': 10,
-        'Freeze layer': False}
-model_name = 'test'
+        'Freeze layer': False,
+        'batch size': batch_size}
+model_name = 'genre_full'
 asynchronous_learning(audioSet, audioOptions, nb_frames, mod_options, model_name)
