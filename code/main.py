@@ -81,8 +81,8 @@ for file_id in range(len(audioSet.files)):
     pickle.dump(data_out, file_dump)
     file_dump.close()
     '''
-    
-    X_embed[file_id] = TSNE().fit_transform(x)
+    for i in range(data_out.shape[0]):
+        X_embed[file_id][i] = TSNE().fit_transform(x[i])
     
 filename = './tsne'
 file = open(filename, 'wb')
