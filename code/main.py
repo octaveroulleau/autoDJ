@@ -73,7 +73,7 @@ for file_id in range(20):
     file_dir = '../../../autoDJ_sets/datasets/gtzan/CNN/'+model_name+'/'
     
     if not os.path.exists(file_dir):
-        os.mkdir(file_dir)
+        os.makedirs(file_dir)
     pickle.dump(open(file_dir+'file_no_'+str(file_id), 'wb'), data_out)
 
 
