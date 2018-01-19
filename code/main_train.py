@@ -1,6 +1,6 @@
-###################
+#################################################################
 # Here the file to run to execute the full process in train mode
-###################
+#################################################################
 
 import similarity_learning.models.vae.train as vae_train
 import numpy as np

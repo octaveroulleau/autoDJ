@@ -1,6 +1,6 @@
-###################
-# Here the file to run to execute the full process in normal (forward) mode
-###################
+##################################################################
+# Here the file to run to execute the full process in forward mode
+##################################################################
 
 import numpy as np
 import similarity_learning.models.vae.compose as vae_comp
@@ -11,16 +11,15 @@ import re_synthesis.assemble_mixing_points as re
 # Load the metadata
 audioSet = pr.load_dataset()
 chunks_list = pr.dataset_to_chunkList(audioSet, 22050)
+# Load the audio data and pre-process
 
 #%% Feed the data forward in the CNN
 
 #%% Feed the data to the VAE
-
 # Fake dataset
 input_dim = 1000
 nb_chunks = 123
 data = np.random.rand(nb_chunks,input_dim).astype('float32')
-
 # Feed to the VAE and return indexes of nearest chunks
 idx_nearest_chunks = vae_comp.compose_line(data)
 # print(idx_nearest_chunks)
