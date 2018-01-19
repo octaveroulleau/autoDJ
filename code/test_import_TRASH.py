@@ -27,4 +27,4 @@ mod_options = {
         'Freeze layer': False,
         'batch size': batch_size}
 model_name = 'genre_full'
-asynchronous_learning(audioSet, audioOptions, nb_frames, mod_options, model_name)
+asynchronous_learning(audioSet, audioOptions, nb_frames, mod_options, model_name, batch_size = batch_size)
