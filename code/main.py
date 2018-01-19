@@ -87,8 +87,9 @@ for file_id in range(5):
     X_embed.append(x_embed)
     
 filename = './tsne'
-file = open(filename, 'wb')
-pickle.dump(X_embed, filename)
+file_dump = open(filename, 'wb')
+pickle.dump(X_embed, file_dump)
+file_dump.close()
     
 
 
