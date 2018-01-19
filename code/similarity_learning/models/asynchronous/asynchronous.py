@@ -137,24 +137,71 @@ def save_model(model_full,
         The model we saved.
     '''
     print('Save model to ...')
-    date = time.ctime()
-    date = date.replace(' ', '_')
-    date = date.replace(':', '-')
-    print('Save base model as ' + name + '_base_' + date + '.h5' + '...')
-    filepath_base = pathmodel + name + '_base_' + date + '.h5'
-    model_base.save(filepath_base)
-    print('Base model saved in '+ filepath_base)
+    filepath_base = pathmodel + name + '_base.h5'
+    filepath_full = pathmodel + name + '_full.h5'
+    filename_history = pathmodel + name + '_history'
 
-    print('Save full model as ' + name + '_full_' + date + '.h5' + '...')
-    filepath_full = pathmodel + name + '_full_' + date + '.h5'
-    model_full.save(filepath_full)
-    print('Base model saved in '+ filepath_full)
+    try:
+        f = open(filepath_base, 'rb')
+        f.close()
+        resp = input('Model already exist, do you wish to overwrite it? y/n \n')
+        if resp == 'y':
+            print('Save base model as ' + name + '_base.h5' + '...')
+            model_base.save(filepath_base)
+            print('Base model saved in '+ filepath_base)
+            
+            print('Save full model as ' + name + '_full.h5' + '...')
+            model_full.save(filepath_full)
+            print('Base model saved in '+ filepath_full)
+            
+            print('Save history as ' + name + '_history...')
+            file = open(filename_history, 'wb')
+            pickle.dump(history, file)
+            print('History saved in' + filename_history)
+            
+            
+        else:
+            resp = input('Change model name? y/n \n')
+            if resp == 'y':
+                name = input('Model name: ')
+                filepath_base = pathmodel + name + '_base.h5'
+                filepath_full = pathmodel + name + '_full.h5'
+                filename_history = pathmodel + name + '_history'
+                
+                print('Save base model as ' + name + '_base.h5' + '...')
+                model_base.save(filepath_base)
+                print('Base model saved in '+ filepath_base)
+                
+                print('Save full model as ' + name + '_full.h5' + '...')
+                model_full.save(filepath_full)
+                print('Base model saved in '+ filepath_full)
+                
+                print('Save history as ' + name + '_history...')
+                file = open(filename_history, 'wb')
+                pickle.dump(history, file)
+                print('History saved in' + filename_history)
+                file.close()
+            else:
+                print('Model not saved')
+    except IOError:
+        print('Save base model as ' + name + '_base.h5' + '...')
+        model_base.save(filepath_base)
+        print('Base model saved in '+ filepath_base)
+        
+        print('Save full model as ' + name + '_full.h5' + '...')
+        model_full.save(filepath_full)
+        print('Base model saved in '+ filepath_full)
+        
+        print('Save history as ' + name + '_history...')
+        file = open(filename_history, 'wb')
+        pickle.dump(history, file)
+        print('History saved in' + filename_history)
+        pass
+        
+
+
     
-    print('Save history as ' + name + '_history_' + date + '...')
-    filename_history = pathmodel + name + '_history_' + date
-    file = open(filename_history, 'wb')
-    pickle.dump(history, file)
-    print('History saved in' + filename_history)
+
     
     
     
