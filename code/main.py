@@ -64,11 +64,11 @@ for i in range(len(chunks)):
 x = np.zeros((len(data), data[0].shape[0], data[0].shape[1]))
 for i in range(len(data)):
     x[i] = data[i]
-x_train = np.swapaxes(np.array(data),1,2)
+#x_train = np.swapaxes(np.array(data),1,2)
 
 
     
-data_out = model_base.predict(x, verbose = 1)
+data_out = model_base.predict(x[0], verbose = 1)
 
 
 print(len(data_out))
