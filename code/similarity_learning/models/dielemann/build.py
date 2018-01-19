@@ -259,7 +259,6 @@ def add_fc_layers(base_model, mod_options):
         The output model. Expects inputs of shape as defined in the base_model 
         and outputs a tensor of shape (batch size, alphabet size).
     '''
-    pdb.set_trace()
     inputs = base_model.output
     
         #%%========== Global temporal pooling layer =========
