@@ -33,11 +33,11 @@ class PieceOfTrack:
 
         return y.tolist()
 
-    def fadein_render(self, tempo_out = TEMPO, bars = 1):
+    def fadein_render(self, bars = 1, tempo_out = TEMPO):
         t_fade = 60.0/self.tempo * 4*bars
         try:           
             y, sr = librosa.load(self.name)
-            y = y[self.t_in-t_fade:self.t_out]
+            y = y[self.t_in-t_fade:self.t_in]
             if sr != SR :
                 raise ValueError("Sampling rates are not all equal to "+str(SR))
         except ValueError as error:
