@@ -55,7 +55,7 @@ data_out = []
 for i in range(len(chunks)):
     chunk = chunks[i].get_cqt(audioSet, audioOptions)
     nbBins = chunk.shape[0]
-    chunk = skt.resize(chunk, (nbBins, 100), mode='reflect')
+    chunk = [skt.resize(chunk, (nbBins, 100), mode='reflect')]
     data.append(chunk)
     meta.append(chunks[i].get_meta(audioSet,'genre'))
     data_out.append(model_base.predict(chunk, verbose = 1))
