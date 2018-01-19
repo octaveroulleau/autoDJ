@@ -70,11 +70,13 @@ for file_id in range(20):
 
     data_out = model_base.predict(x, verbose = 1)
     
-    file_dir = '../../../autoDJ_sets/datasets/gtzan/CNN/'+model_name+'/'
+    file_dir = '../../../autodj_sets/datasets/gtzan/CNN/'+model_name+'/'
     
     if not os.path.exists(file_dir):
         os.makedirs(file_dir)
-    pickle.dump(open(file_dir+'file_no_'+str(file_id), 'wb'), data_out)
+    file_dump = open(file_dir+'file_no_'+str(file_id), 'wb')
+    pickle.dump(data_out, file_dump)
+    file_dump.close()
 
 
 # Feed the data to the VAE
