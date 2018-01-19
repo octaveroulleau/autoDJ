@@ -13,7 +13,6 @@ import assemble_mixing_points as re # from re_synthesis
 DATA_PATH = "../../../autodj_sets/datasets/gtzan/data/au/hiphop/"
 DATA_NAMES = [DATA_PATH+'/'+f for f in os.listdir(DATA_PATH) if not f.startswith('.')]
 
-
 #Toy MixingPoints definition
 mp1 = mp.MixingPoint(DATA_NAMES[0],80000,90,DATA_NAMES[0],80000,160)
 mp2 = mp.MixingPoint(DATA_NAMES[0],150000,160,DATA_NAMES[2],200000,90)

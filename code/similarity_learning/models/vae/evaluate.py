@@ -2,6 +2,9 @@
 1. Defnition of a custom score : distance between two consecutive chunks of a track should be minimal
 2. Evaluate score on the training dataset
 3. Use T-SNE to visually check coherence of the embedding space
+
+@author: laure
+
 """
 
 # Use toymix !!! (chunk by chunk)
