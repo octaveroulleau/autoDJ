@@ -82,15 +82,31 @@ for file_id in range(5):
     file_dump.close()
     '''
     x_embed = []
+    
     for i in range(data_out.shape[0]):
-        x_embed.append(TSNE().fit_transform(x[i]))
+         x_embed.append(TSNE().fit_transform(data_out[i].reshape(1,-1)))
     X_embed.append(x_embed)
     
 filename = './tsne'
 file_dump = open(filename, 'wb')
 pickle.dump(X_embed, file_dump)
 file_dump.close()
-    
+
+#%%
+import matplotlib.pyplot as plt
+import pickle
+tsne = pickle.load(open('./tsne', 'rb'))
+#%%
+
+tsne = tsne[1:]
+
+plt.figure()
+for i in range(len(tsne)):
+    for j in range(len(tsne[i])):
+        plt.scatter(tsne[i][j][0][0], tsne[i][j][0][1] )
+
+plt.show()
+
 
 
 # Feed the data to the VAE
