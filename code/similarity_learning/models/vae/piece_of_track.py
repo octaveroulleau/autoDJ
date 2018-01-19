@@ -16,8 +16,8 @@ class PieceOfTrack:
 
     def render(self, tempo_out):
         y, sr = librosa.load(self.name)
-        print(y.shape[0])
-        print(self.t_out)
+        # print(y.shape[0])
+        # print(self.t_out)
 
         try:
             y = y[self.t_in:self.t_out]
@@ -28,8 +28,7 @@ class PieceOfTrack:
 
         if (tempo_out != 0) & (self.tempo != 0):
             factor = float(tempo_out)/float(self.tempo)
-            print(factor,self)
-            print(type(factor))
+            print("factor tempo : ", factor,self)
             y = librosa.effects.time_stretch(y, factor)
 
         return y.tolist(),sr

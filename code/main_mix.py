@@ -23,7 +23,7 @@ data = np.random.rand(nb_chunks,input_dim).astype('float32')
 
 # Feed to the VAE and return indexes of nearest chunks
 idx_nearest_chunks = vae_comp.compose_line(data)
-print(idx_nearest_chunks)
+# print(idx_nearest_chunks)
 # From this, establish the list of mixing points
 mp_list = vae_comp.chunks_to_mp(idx_nearest_chunks, chunks_list, audioSet)
 print(mp_list)
