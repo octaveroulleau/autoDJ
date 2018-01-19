@@ -70,7 +70,7 @@ for file_id in range(20):
 
     data_out = model_base.predict(x, verbose = 1)
     
-    file_dir = '../../../autodj_sets/datasets/gtzan/CNN/'+model_name+'/'
+    file_dir = './similarity_learning/Datasets/gtzan/CNN/'+model_name+'/'
     
     if not os.path.exists(file_dir):
         os.makedirs(file_dir)
