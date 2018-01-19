@@ -61,7 +61,7 @@ for i in range(len(chunks)):
     data_out.append(model_base.predict(chunk, verbose = 1))
 
 
-pdb.set_trace()
+print(len(data_out))
 # Feed the data to the VAE
 
 # Re-synthetize data (auto-DJ)
