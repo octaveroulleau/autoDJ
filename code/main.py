@@ -46,7 +46,7 @@ model_base, model_options = similarity_learning.models.dielemann.load.load_CNN_m
 file = audioSet.files[0]
 downbeat = audioSet.metadata['downbeat'][0]
 Fs = 44100
-chunks = track_to_chunks(idx, Fs, downbeat)
+chunks = track_to_chunks(0, Fs, downbeat)
 
 data = []
 meta = []
