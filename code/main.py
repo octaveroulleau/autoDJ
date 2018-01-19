@@ -84,7 +84,8 @@ for file_id in range(5):
     x_embed = []
     
     for i in range(data_out.shape[0]):
-         x_embed.append(TSNE().fit_transform(data_out[i].reshape(-1,1)))
+        print(i)
+        x_embed.append(TSNE().fit_transform(data_out[i].reshape(-1,1)))
     X_embed.append(x_embed)
     
 filename = './tsne'
@@ -93,6 +94,7 @@ pickle.dump(X_embed, file_dump)
 file_dump.close()
 
 #%%
+'''
 import matplotlib.pyplot as plt
 import pickle
 tsne = pickle.load(open('./tsne', 'rb'))
@@ -112,3 +114,4 @@ plt.show()
 # Feed the data to the VAE
 
 # Re-synthetize data (auto-DJ)
+'''
