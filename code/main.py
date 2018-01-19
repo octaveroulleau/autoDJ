@@ -68,7 +68,7 @@ for i in range(len(data)):
 
 
     
-data_out = model_base.predict(x[0], verbose = 1)
+data_out = model_base.predict(x, verbose = 1)
 
 
 print(len(data_out))
