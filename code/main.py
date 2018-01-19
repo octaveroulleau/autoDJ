@@ -11,6 +11,7 @@ import keras
 import data
 import similarity_learning.models.dielemann.load 
 from keras.backend.tensorflow_backend import set_session
+import pdb
 #%%
 
 config = tf.ConfigProto()
@@ -37,6 +38,7 @@ mod_options = {
 model_name = 'genre_full'
 
 model_base, model_options = similarity_learning.models.dielemann.load.load_CNN_model(model_name)
+pdb.set_trace()
 
 # Feed the data to the VAE
 
