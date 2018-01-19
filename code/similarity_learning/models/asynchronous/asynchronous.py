@@ -20,11 +20,7 @@ import skimage.transform as skt
 
 
 def asyncTaskPointer(idx, dataIn, options):
-    '''
-    TO DO
-    - Call track to chunk function and pass data and metadata through
-    - Fix meta import
-    '''
+
     audioSet = options['audioSet']
     
     downbeat = audioSet.metadata["downbeat"][idx][0]
@@ -60,13 +56,8 @@ def asyncTaskPointer(idx, dataIn, options):
 
     return data, meta
     
-def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, model_name, task = "genre", freq_bins = 168, batch_size = 10, nb_epochs = 2):
-    '''
-    TO DO:
-    -Define in call:  number of frames per chunk, type of model, model options
-    -Add number of frames to audioOptions
-    -Create model based on model options
-    '''
+def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, model_name, task = "genre", freq_bins = 168, batch_size = 10, nb_epochs = 200):
+
     print('batch_size:'+str(batch_size))
     asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 2, batchSize = batch_size, shuffle = True)
     options = audioOptions
