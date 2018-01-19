@@ -18,6 +18,7 @@ from data.sets.audio import DatasetAudio, importAudioData
 import numpy as np
 import os
 import pickle
+from sklearn.manifold import TSNE
 #%%
 
 config = tf.ConfigProto()
@@ -46,6 +47,7 @@ model_base, model_options = similarity_learning.models.dielemann.load.load_CNN_m
 
 
 #%%
+X_embed = []
 for file_id in range(len(audioSet.files)):
     file = audioSet.files[file_id]
     downbeat = audioSet.metadata['downbeat'][file_id][0]
@@ -70,6 +72,7 @@ for file_id in range(len(audioSet.files)):
 
     data_out = model_base.predict(x, verbose = 1)
     
+    '''
     file_dir = './similarity_learning/Datasets/gtzan/CNN/'+model_name+'/'
     
     if not os.path.exists(file_dir):
@@ -77,6 +80,14 @@ for file_id in range(len(audioSet.files)):
     file_dump = open(file_dir+'file_no_'+str(file_id), 'wb')
     pickle.dump(data_out, file_dump)
     file_dump.close()
+    '''
+    
+    X_embed[file_id] = TSNE().fit_transform(x)
+    
+filename = './tsne'
+file = open(filename, 'wb')
+pickle.dump(X_embed, filename)
+    
 
 
 # Feed the data to the VAE
