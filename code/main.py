@@ -15,7 +15,7 @@ import pdb
 from pre_processing.chunkify import track_to_chunks
 import skimage.transform as skt
 from data.sets.audio import DatasetAudio, importAudioData
-from similarity_learning.models.asynchronous.asynchronous import reshape_data
+import numpy as np
 #%%
 
 config = tf.ConfigProto()
@@ -60,9 +60,12 @@ for i in range(len(chunks)):
     data.append(chunk)
     meta.append(chunks[i].get_meta(audioSet,'genre'))
 
-alphabet_size = 10
 
-x, y = reshape_data(data, meta, alphabet_size)
+x = np.zeros((len(data), data[0].shape[0], data[0].shape[0]))
+for i in range(len(data)):
+    x[i] = data[i]
+x_train = np.swapaxes(np.array(data),1,2)
+
 
     
 data_out = model_base.predict(x, verbose = 1)
