@@ -66,6 +66,8 @@ for i in history_epoch:
     acc.append(history_epoch[i]['acc'])
     loss.append(history_epoch[i]['loss'])
 
-    
+#%%
 plt.figure()
-plt.plot
+plt.plot(range(200), val_loss)
+plt.figure()
+plt.plot(range(200), val_acc)

@@ -209,12 +209,16 @@ def build_conv_layers(frames, freq_bins, mod_options):
     return model
 
 #%%
+
 def pool_results(base_model):
-    inputs = base_model.output
+    shape1 = int(base_model.output.shape[1])
+    shape2 = int(base_model.output.shape[2])
+    inputs = layers.Input(shape = (shape1, shape2))
     pool_max = layers.GlobalMaxPooling1D()(inputs)
     
     model = Model(inputs = inputs, outputs = pool_max)
-    model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
+    model_pool = model([base_model.output])
+    model_pool.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
     
     return model
 
@@ -258,7 +262,7 @@ def add_fc_layers(base_model, mod_options):
         The output model. Expects inputs of shape as defined in the base_model 
         and outputs a tensor of shape (batch size, alphabet size).
     '''
-    
+    pdb.set_trace()
     inputs = base_model.output
     
         #%%========== Global temporal pooling layer =========

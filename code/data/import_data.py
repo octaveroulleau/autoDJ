@@ -37,7 +37,7 @@ import numpy as np
 #import keras
 #from data_to_phrase import *
 
-
+#%%
 def import_data(pamTransforms = 'cqt'):
     #%%
     # Root to find the GTZAN dataset
