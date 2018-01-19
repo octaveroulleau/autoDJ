@@ -81,9 +81,10 @@ for file_id in range(20):
     pickle.dump(data_out, file_dump)
     file_dump.close()
     '''
-    pdb.set_trace()
+    x_embed = []
     for i in range(data_out.shape[0]):
-        X_embed[file_id][i] = TSNE().fit_transform(x[i])
+        x_embed.append(TSNE().fit_transform(x[i]))
+    X_embed.append(x_embed)
     
 filename = './tsne'
 file = open(filename, 'wb')
