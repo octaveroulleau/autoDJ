@@ -46,7 +46,7 @@ model_base, model_options = similarity_learning.models.dielemann.load.load_CNN_m
 
 
 #%%
-for file_id in range(len(20)):
+for file_id in range(20):
     file = audioSet.files[file_id]
     downbeat = audioSet.metadata['downbeat'][file_id][0]
     Fs = 44100
