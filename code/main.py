@@ -12,6 +12,9 @@ import data
 import similarity_learning.models.dielemann.load 
 from keras.backend.tensorflow_backend import set_session
 import pdb
+from pre_processing.chunkify import track_to_chunks
+import skimage.transform as skt
+from data.sets.audio import DatasetAudio, importAudioData
 #%%
 
 config = tf.ConfigProto()
@@ -38,7 +41,24 @@ mod_options = {
 model_name = 'genre_full'
 
 model_base, model_options = similarity_learning.models.dielemann.load.load_CNN_model(model_name)
-pdb.set_trace()
+
+#%%
+file = audioSet.files[0]
+downbeat = audioSet.metadata['downbeat'][0]
+Fs = 44100
+chunks = track_to_chunks(idx, Fs, downbeat)
+
+data = []
+meta = []
+data_out = []
+#print('loading '+ dataIn[idx
+for i in range(len(chunks)):
+    chunk = chunks[i].get_cqt(audioSet, options)
+    nbBins = chunk.shape[0]
+    chunk = skt.resize(chunk, (nbBins, 100), mode='reflect')
+    data.append(chunk)
+    meta.append(chunks[i].get_meta(audioSet,'genre'))
+    data_out.append(model_base.predict(chunk, verbose = 1))
 
 # Feed the data to the VAE
 
