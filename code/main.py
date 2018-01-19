@@ -64,7 +64,7 @@ for i in range(len(chunks)):
 x = np.zeros((len(data), data[0].shape[0], data[0].shape[1]))
 for i in range(len(data)):
     x[i] = data[i]
-#x_train = np.swapaxes(np.array(data),1,2)
+x = np.swapaxes(np.array(data),1,2)
 
 
     
