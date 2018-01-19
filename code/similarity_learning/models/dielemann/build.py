@@ -211,9 +211,7 @@ def build_conv_layers(frames, freq_bins, mod_options):
 #%%
 
 def pool_results(base_model):
-    shape1 = int(base_model.output.shape[1])
-    shape2 = int(base_model.output.shape[2])
-    inputs = layers.Input(shape = (shape1, shape2))
+    inputs = base_model.output
     pool_max = layers.GlobalMaxPooling1D()(inputs)
     
     model = Model(inputs = base_model.inputs, outputs = pool_max)
