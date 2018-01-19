@@ -27,8 +27,8 @@ mod_options = {
         'Alphabet size': 10,
         'Freeze layer': False,
         'batch size': batch_size}
-model_name = 'artist_full'
-asynchronous_learning(audioSet, audioOptions, nb_frames, mod_options, model_name, batch_size = batch_size, task = "artist")
+model_name = 'key_full'
+asynchronous_learning(audioSet, audioOptions, nb_frames, mod_options, model_name, batch_size = batch_size, task = "key")
 #%%
 '''
 import pickle
