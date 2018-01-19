@@ -9,6 +9,9 @@ from similarity_learning.models.vae.piece_of_track import PieceOfTrack
 from re_synthesis.mixing_techniques import mix
 import librosa
 import numpy as np
+from operator import add,mul
+from const import SR, TEMPO
+
 
 def fetch_audio(mp_list):
     """ Step 1
@@ -51,18 +54,37 @@ def mix_tracks(tracklist):
     """ Step 2
     Concatenation of tracks from the tracklist with stretching
     """
-    tempo = 120
-    final_set = tracklist[0].render(tempo)[0]
+    final_set = tracklist[0].render()
     for piece in tracklist[1:]:
-        current = piece.render(tempo)
-        data = current[0]
-        sr = current[1]
+        data = piece.render()
         final_set = mix(final_set,data,'basic')
         
         
-    return final_set, sr
+    return final_set
 
+def mix(tracklist, style = 'basic'):
+    
+    dj_set = tracklist[0].render()
 
+    for piece in tracklist[1:]:
+	    if (style == 'basic'):
+	        dj_set = dj_set + piece.render()
+	        
+	    elif (style == 'noise'):
+	        length = int(1.2*SR)
+	        
+	        ramp = [float(i)/(length*3) for i in range(length)]
+	        tail = map(mul,np.random.rand(length),ramp)
+	        print(len(dj_set[-length:]), len(tail))
+	        dj_set[-length:] = map(add,dj_set[-length:],tail)
+	        dj_set = dj_set + piece.render()
+    	elif (style == 'fade'):
+    		fade_bars = 1 #bars
+    		to_add = piece.render() ######TODO
+    		###########
+
+	        
+    return dj_set
 
 
 def compose_track(mp_list):
@@ -73,13 +95,13 @@ def compose_track(mp_list):
     Returns the new audio track
     """
     tracklist = fetch_audio(mp_list)
-    final_set, sr = mix_tracks(tracklist)
+    final_set= mix_tracks(tracklist)
     #final_set = mix_tracks(tracklist)
 
-    return np.array(final_set), sr
+    return np.array(final_set)
 
 
-def write_track(audio, sr, filename = 'finalmix.wav'):
+def write_track(audio, filename = 'finalmix.wav'):
     """ Writes created track to a file
     """
-    librosa.output.write_wav(filename, audio, sr)
+    librosa.output.write_wav(filename, audio, SR)
