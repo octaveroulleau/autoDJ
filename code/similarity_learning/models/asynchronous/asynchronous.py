@@ -60,14 +60,14 @@ def asyncTaskPointer(idx, dataIn, options):
 
     return data, meta
     
-def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, model_name, task = "genre", freq_bins = 168, batch_size = 5, nb_epochs = 5):
+def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, model_name, task = "genre", freq_bins = 168, batch_size = 5, nb_epochs = 1000):
     '''
     TO DO:
     -Define in call:  number of frames per chunk, type of model, model options
     -Add number of frames to audioOptions
     -Create model based on model options
     '''
-    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 1, batchSize = 5, shuffle = True)
+    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 1, batchSize = 10, shuffle = True)
     options = audioOptions
     options["audioSet"] = audioSet  
     options["task"] = task
@@ -94,10 +94,38 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
             y_train = 0
             currentData = 0
             currentMeta = 0
-            
+        '''
+        '''
         print('Finished epoch #'+str(epoch))
-    
-    save_model(model_full, model_base, history_list, model_name)
+
+        if epoch == 0:
+            model_full_saved = model_full
+            model_base_saved = model_base
+            history_list_saved = history_list
+            epoch_saved = 0
+            patience = 10
+            wait_time = 0
+        else:
+            val_loss_saved = 0
+            val_loss = 0
+
+            for i in range(int(np.floor(len(audioSet.files)/batchSize))):
+                val_loss_saved = val_loss_saved + history_list_saved["epoch "+str(epoch_saved)+" batch "+i]['val_loss']
+                val_loss = val_loss + history_list["epoch "+str(epoch)+" batch "+i]['val_loss']
+            if val_loss_saved < val_loss:
+                wait_time = wait_time + 1
+            else:
+                wait_time = 0
+                model_full_saved = model_full
+                model_base_saved = model_base
+                history_list_saved = history_list
+                epoch_saved = epoch
+        
+        if wait_time == patience:
+            break
+                
+                    
+    save_model(model_full_saved, model_base_saved, history_list_saved, model_name)
     return 0#model_full, model_base
 
 def reshape_data(currentData, currentMeta, alphabet_size):
