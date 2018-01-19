@@ -216,8 +216,7 @@ def pool_results(base_model):
     inputs = layers.Input(shape = (shape1, shape2))
     pool_max = layers.GlobalMaxPooling1D()(inputs)
     
-    model = Model(inputs = inputs, outputs = pool_max)
-    model_pool = model([base_model.output])
+    model = Model(inputs = base_model.inputs, outputs = pool_max)
     model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
     
     return model
