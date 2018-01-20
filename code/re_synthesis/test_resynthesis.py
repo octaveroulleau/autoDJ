@@ -10,7 +10,7 @@ import mixing_point as mp    # from similarity_learning.models.vae
 import piece_of_track as pot # from similarity_learning.models.vae 
 import assemble_mixing_points as re # from re_synthesis 
 
-DATA_PATH = "../../autodj_sets/datasets/gtzan/data/au/hiphop/"
+DATA_PATH = "../../../autodj_sets/datasets/gtzan/data/au/hiphop/"
 DATA_NAMES = [DATA_PATH+'/'+f for f in os.listdir(DATA_PATH) if not f.startswith('.')]
 
 #Toy MixingPoints definition

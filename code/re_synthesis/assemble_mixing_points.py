@@ -188,4 +188,4 @@ def write_track(audio, filename = 'finalmix.wav'):
 
     """
 
-    librosa.output.write_wav(filename, audio, SR)
+    librosa.output.write_wav(filename, SR, audio)

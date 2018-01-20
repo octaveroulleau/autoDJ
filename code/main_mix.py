@@ -30,4 +30,4 @@ print(mp_list)
 
 #%% Re-synthetize data (auto-DJ)
 finalset = re.compose_track(mp_list)
-re.write_track(np.array(finalset), SR, 'test.wav')
+re.write_track(np.array(finalset), 'test.wav')
