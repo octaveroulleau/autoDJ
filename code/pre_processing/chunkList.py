@@ -5,6 +5,9 @@ Class chunks list
 
 @author: pierre-amaury
 """
+
+import sys
+sys.path.append("pre_processing/")
 import chunkAudio as ca
 
 class ChunkList:

@@ -6,6 +6,9 @@
 3. Train the VAE unsupervised on this data (1 track = 1 valid path)
 4. Adjust the parameters to get a better embedding space
 5. Freeze the model (save)
+
+@author: laure
+
 """
 
 # Task : auto-encoding of the chunks' features (sort of t-sne : organise space), dim 10.
