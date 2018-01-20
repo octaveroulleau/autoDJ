@@ -24,6 +24,8 @@ import mixing_point as mp
 
 import matplotlib.pyplot as plt
 
+import pickle
+
 def forward(cnn_data, model):
 	""" Input training set in CNN's feature space
 	Output the same set in the VAE's latent space
@@ -48,9 +50,11 @@ dr.plot_latent2(data, vae, n_points=2000, method=dr.latent_pca, layer=0, write="
 	"""
 
 def evaluate(data):
+
 	# Load a pre-trained VAE
-	filepath = 'similarity_learning/models/vae/saved_models/test_spec_softplus.t7'
-	vae = VAE.load_vae(filepath)
+	model_name = 'test_vae_cnn_1'
+	dirpath = 'similarity_learning/models/vae/'
+	vae = VAE.load_vae(dirpath + 'saved_models/' + model_name + '.t7')
 
 	# Perform a forward pass to project data to the embedding space
 	x = Variable(torch.from_numpy(data))
@@ -59,4 +63,11 @@ def evaluate(data):
 	dim_embedd_space = embedded_data.shape[1]
 	nb_chunks_total = embedded_data.shape[0]
 
-	print("OK !")
+	log_path = dirpath + 'training_history/' + model_name + '.pkl'
+	training_log = pickle.load(open(log_path, 'rb'))
+
+	plt.plot(training_log[0])
+	plt.plot(training_log[1])
+	plt.legend(["training loss", "validation loss"])
+	plt.show()
+

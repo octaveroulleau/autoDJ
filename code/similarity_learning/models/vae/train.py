@@ -16,11 +16,12 @@
 
 import sys
 sys.path.append('similarity_learning/models/vae/')
-
 import VAE
-import numpy as np
 
-def train_and_save(data):
+import numpy as np
+import pickle
+
+def train_and_save(data, max_epochs):
 	""" Trains the VAE model on the given dataset and saves it as a .t7 serialized object.
 
 	Parameters
@@ -41,7 +42,6 @@ def train_and_save(data):
 	"""
 	input_dim = data.shape[1]
 	nb_chunks = data.shape[0]
-	print(input_dim, nb_chunks)
 
 	#%% Make model
 	model_type="dlgm"
@@ -57,14 +57,20 @@ def train_and_save(data):
 
 	#%% Define training setting and train
 	batch_size=100
-	max_epochs=1 # max_epochs = 1000
-	vae = VAE.train_vae(vae, data, max_epochs=max_epochs, batch_size=batch_size, model_type=model_type, use_cuda=use_cuda)
+	vae, logs = VAE.train_vae(vae, data, max_epochs=max_epochs, batch_size=batch_size, model_type=model_type, use_cuda=use_cuda)
 
 	#%% Save model to saved_models once trained
 	test_name = "test_vae_cnn_1"
 	save_dir = 'similarity_learning/models/vae/saved_models/'
 	vae.save(save_dir + test_name + '.t7')
 	print("Saved " + model_type + " VAE to " + save_dir + test_name + ".")
+
+	#%% Save training history as well
+	save_dir = 'similarity_learning/models/vae/training_history/'
+	logs_name = save_dir + test_name + '.pkl'
+	pickle.dump(logs, open(logs_name, 'wb'))
+	print("Saved training history to " + logs_name)
+
 
 
 

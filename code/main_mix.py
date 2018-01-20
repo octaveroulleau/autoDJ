@@ -11,7 +11,8 @@ from re_synthesis.const import SR
 #%% Load the data and pre-process them
 # Load the metadata
 audioSet = pr.load_dataset()
-chunks_list = pr.dataset_to_chunkList(audioSet, 22050)
+chunks_list = pr.dataset_to_chunkList(audioSet, int(SR))
+print(chunks_list.get_length())
 # Load the audio data and pre-process
 
 #%% Feed the data forward in the CNN
