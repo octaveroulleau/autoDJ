@@ -1,3 +1,6 @@
+import sys
+sys.path.append("re_synthesis/")
+
 import librosa
 from const import SR, TEMPO
 
@@ -27,14 +30,13 @@ class PieceOfTrack:
 
         if (tempo_out != 0) & (self.tempo != 0):
             factor = float(tempo_out)/float(self.tempo)
-            print(factor,self)
-            print(type(factor))
             y = librosa.effects.time_stretch(y, factor)
 
         return y.tolist()
 
     def fadein_render(self, bars = 1, tempo_out = TEMPO):
-        t_fade = 60.0/self.tempo * 4*bars
+        t_fade = int(60.0/self.tempo * 4*bars*SR)
+        print(t_fade,self.t_in-t_fade)
         try:           
             y, sr = librosa.load(self.name)
             y = y[self.t_in-t_fade:self.t_in]
@@ -45,8 +47,6 @@ class PieceOfTrack:
 
         if (tempo_out != 0) & (self.tempo != 0):
             factor = float(tempo_out)/float(self.tempo)
-            print(factor,self)
-            print(type(factor))
             y = librosa.effects.time_stretch(y, factor)
 
         return y.tolist()

@@ -10,7 +10,6 @@ import sys
 sys.path.append("similarity_learning/models/vae/")
 sys.path.append("re_synthesis/")
 from piece_of_track import PieceOfTrack
-from mixing_techniques import create_mix
 
 import librosa
 import numpy as np
@@ -94,37 +93,53 @@ def create_mix(tracklist, style = 'basic'):
     """
     
     dj_set = tracklist[0].render()
+    p_style = style
 
     for piece in tracklist[1:]:
+        
+        if (p_style == 'random'):
+            styles = ['basic','noise','Xfade']
+            i = np.random.randint(len(styles))
+            style = styles[i]
+            
         if (style == 'basic'):
             dj_set = dj_set + piece.render()
             
         elif (style == 'noise'):
             length = int(1.2*SR)
             
-            ramp = [float(i)/(length*3) for i in range(length)]
+            ramp = [float(j)/(length*3) for j in range(length)]
             tail = map(mul,np.random.rand(length),ramp)
             dj_set[-length:] = map(add,dj_set[-length:],tail)
             dj_set = dj_set + piece.render()
+            
         elif (style == 'Xfade'):
             fade_bars = 1 #bars
-            fade_len = 4*fade_bars * 60.0/TEMPO
             to_add = piece.fadein_render(fade_bars)
+            fade_len = len(to_add)
+            
+            ramp = [float(j)/(fade_len) for j in range(fade_len)]
+            tail = map(mul,to_add,ramp)
+            
+            inv_ramp = [1-n for n in ramp]
+            dj_set[-fade_len:] = map(mul,dj_set[-fade_len:],inv_ramp)
             
             dj_set[-fade_len:] = map(add,dj_set[-fade_len:],to_add)
             dj_set = dj_set + piece.render()
-            
+          
+        print (piece, style)
             
     return dj_set
 
 
-def compose_track(mp_list):
+def compose_track(mp_list, style = 'random'):
     """ Assembles the new mix by calling the previous functions in the right order.
     
     Parameters
     ----------
     mp_list : list of mixing points (see mixing_point.py)
         Defines the future mix.
+    style : the style of the mix (basic, noise or Xfade)
     
     Returns
     -------
@@ -140,7 +155,7 @@ def compose_track(mp_list):
 
     # Step 1 : fetch the audio 
     tracklist = fetch_audio(mp_list)
-    final_set= create_mix(tracklist)
+    final_set= create_mix(tracklist, style)
 
     return np.array(final_set)
 
@@ -153,8 +168,6 @@ def write_track(audio, filename = 'finalmix.wav'):
     ----------
     audio : librosa audio object
         Represents the final mix.
-    sr : int
-        The sample rate of the mix.
     filename : str
         The path to write the audio file to (as '.wav')
 
