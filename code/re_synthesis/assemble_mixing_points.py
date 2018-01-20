@@ -4,6 +4,9 @@ These function aim at assembling pieces of tracks that, according to the VAE, ca
 This module takes as input a list of mixing points (see mixing_point.py) proposed by the VAE.
 It uses the audio files : .au and their signal metadata (downbeat, tonality) to produce an audio file that combine the chunks.
 For this, it adjusts tonality and tempo using a phase vocoder, then aligns beats and downbeats of both extracts
+
+@author: cyran
+
 """
 
 import sys
@@ -56,6 +59,9 @@ def fetch_audio(mp_list):
 
             if (beginning > end):
                 raise ValueError("A track ends before the beginning")
+
+            if (beginning < 0):
+                raise ValueError("A track starts before 0")
 
         except ValueError as error:
             print(error)
@@ -182,4 +188,4 @@ def write_track(audio, filename = 'finalmix.wav'):
 
     """
 
-    librosa.output.write_wav(filename, audio, SR)
+    librosa.output.write_wav(filename, audio, int(SR))

@@ -19,6 +19,7 @@ class PieceOfTrack:
             " to " + str(self.t_out) + " at " + str(self.tempo) + " bpm"
         return text
 
+
     def render(self, tempo_out = TEMPO):
         try:           
             y, sr = librosa.load(self.name)
@@ -36,7 +37,7 @@ class PieceOfTrack:
 
     def fadein_render(self, bars = 1, tempo_out = TEMPO):
         t_fade = int(60.0/self.tempo * 4*bars*SR)
-        print(t_fade,self.t_in-t_fade)
+        # print(t_fade,self.t_in-t_fade)
         try:           
             y, sr = librosa.load(self.name)
             y = y[self.t_in-t_fade:self.t_in]

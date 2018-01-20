@@ -22,6 +22,6 @@ class MixingPoint:
 
 
 	def __repr__(self):
-		text = "Mix from track "+str(self.track1)+" at time "+str(self.time1)+" to track "+str(self.track2)+" at time "+str(self.time2)
+		text = "Mix from track "+str(self.track1[44:])+" at time "+str(self.time1)+" to track "+str(self.track2[44:])+" at time "+str(self.time2)
 		return text
 

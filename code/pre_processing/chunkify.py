@@ -6,15 +6,19 @@ Functions to create chunks from whole tracks
 @author: pierre-amaury
 """
 
+import sys
+sys.path.append("pre_processing/")
 import chunkAudio as ca
 import chunkList as cl
-import os
 import numpy as np
 import skimage.transform as skt
+import os
 # import module from autodj_datasets
-os.chdir("../../../autodj_sets")
+# os.chdir("../../../autodj_sets")
+# from data.sets.audio import DatasetAudio
+# os.chdir("../autoDJ/code/pre_processing")
+sys.path.append("../../../autodj_sets/")
 from data.sets.audio import DatasetAudio
-os.chdir("../autoDJ/code/pre_processing")
 
 
 def load_dataset():
@@ -29,7 +33,7 @@ def load_dataset():
         Access to metadata with : audioSet.metadata["task"] where taskcan be "artist", "beat", "downbeat", "genre", "key", "tempo".
     
     """
-    baseFolder = "/home/pierre-amaury/Documents/PAM/projet/autodj_sets/datasets"
+    baseFolder = "../../../autodj_sets/datasets"
     taskList = ["artist", "beat", "downbeat", "genre", "key", "tempo"]
     
     audioOptions = {
