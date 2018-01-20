@@ -6,6 +6,7 @@ Functions to create chunks from whole tracks
 @author: pierre-amaury
 """
 
+<<<<<<< HEAD
 import sys
 sys.path.append("pre_processing/")
 import chunkAudio as ca
@@ -19,6 +20,7 @@ import os
 # os.chdir("../autoDJ/code/pre_processing")
 sys.path.append("../../../autodj_sets/")
 from data.sets.audio import DatasetAudio
+import pdb
 
 
 def load_dataset():
@@ -73,7 +75,7 @@ def track_to_chunks(track_id, Fs, downbeat):
     """
     chunks = [] # future list of chunks
     
-    for i in range(downbeat.size-1):
+    for i in range(len(downbeat)-1):
         echantillon_debut = int(round(downbeat[i]*Fs))
         echantillon_fin = int(round(downbeat[i+1]*Fs))
         
