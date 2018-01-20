@@ -6,6 +6,7 @@ import numpy as np
 import similarity_learning.models.vae.compose as vae_comp
 import pre_processing.chunkify as pr
 import re_synthesis.assemble_mixing_points as re
+from re_synthesis.const import SR
 
 #%% Load the data and pre-process them
 # Load the metadata
@@ -28,5 +29,5 @@ mp_list = vae_comp.chunks_to_mp(idx_nearest_chunks, chunks_list, audioSet)
 print(mp_list)
 
 #%% Re-synthetize data (auto-DJ)
-finalset, sr = re.compose_track(mp_list)
-re.write_track(np.array(finalset),sr, 'test.wav')
+finalset = re.compose_track(mp_list)
+re.write_track(finalset, 'test.wav')

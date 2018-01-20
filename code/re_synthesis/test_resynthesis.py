@@ -14,15 +14,14 @@ DATA_PATH = "../../../autodj_sets/datasets/gtzan/data/au/hiphop/"
 DATA_NAMES = [DATA_PATH+'/'+f for f in os.listdir(DATA_PATH) if not f.startswith('.')]
 
 #Toy MixingPoints definition
-mp1 = mp.MixingPoint(DATA_NAMES[0],80000,90,DATA_NAMES[0],80000,160)
-mp2 = mp.MixingPoint(DATA_NAMES[0],150000,160,DATA_NAMES[2],200000,90)
-mp3 = mp.MixingPoint(DATA_NAMES[2],300000,90,DATA_NAMES[3],150000,150)
-mp4 = mp.MixingPoint(DATA_NAMES[3],190000,150,DATA_NAMES[4],600000,110)
-mp_list = [mp1,mp2,mp3,mp4]
+mp1 = mp.MixingPoint(DATA_NAMES[0],200000,120,DATA_NAMES[2],80000,90)
+mp3 = mp.MixingPoint(DATA_NAMES[2],500000,120,DATA_NAMES[3],150000,120)
+mp4 = mp.MixingPoint(DATA_NAMES[3],250000,120,DATA_NAMES[4],550000,120)
+mp_list = [mp1,mp3,mp4]
 
-finalset, sr = re.compose_track(mp_list)
-# tracklist = re.fetch_audio(mp_list)
-# finalset, sr = re.stack_tracks(tracklist)
-re.write_track(np.array(finalset),sr)
+
+finalset = re.compose_track(mp_list)
+
+re.write_track(np.array(finalset))
 
 
