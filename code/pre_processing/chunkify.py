@@ -6,7 +6,6 @@ Functions to create chunks from whole tracks
 @author: pierre-amaury
 """
 
-<<<<<<< HEAD
 import sys
 sys.path.append("pre_processing/")
 import chunkAudio as ca

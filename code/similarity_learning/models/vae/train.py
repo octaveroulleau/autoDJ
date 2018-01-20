@@ -61,10 +61,10 @@ def train_and_save(data):
 	vae = VAE.train_vae(vae, data, max_epochs=max_epochs, batch_size=batch_size, model_type=model_type, use_cuda=use_cuda)
 
 	#%% Save model to saved_models once trained
-	test_name = "test_vae_1"
+	test_name = "test_vae_cnn_1"
 	save_dir = 'similarity_learning/models/vae/saved_models/'
 	vae.save(save_dir + test_name + '.t7')
-	print("Saved " + model_type + " VAE to " save_dir + test_name ".")
+	print("Saved " + model_type + " VAE to " + save_dir + test_name + ".")
 
 
 

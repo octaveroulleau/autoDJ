@@ -135,7 +135,7 @@ def train_vae(vae, data, max_epochs=100, batch_size=100, model_type="dlgm", labe
 		batch_ids = permutation(len(data)) 
 		for i in range(len(batch_ids)//batch_size):
 			# load data
-			x = Variable(torch.from_numpy(data[batch_ids[i*batch_size:(i+1)*batch_size]]))
+			x = Variable(torch.from_numpy(data[batch_ids[i*batch_size:(i+1)*batch_size]]).float())
 			if model_type == "cvae":
 				labels = Variable(torch.from_numpy(labels[batch_ids[i*batch_size:(i+1)*batch_size]]).float())
 				x = [x, labels]

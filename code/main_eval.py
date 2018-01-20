@@ -43,6 +43,20 @@ downbeats_score_madmom = mir_eval_downbeats(downbeats_ref, downbeats_madmom)
 
 # Feed the data forward in the CNN
 
+# import matplotlib.pyplot as plt
+# import pickle
+# tsne = pickle.load(open('./tsne', 'rb'))
+# #%%
+
+# tsne = tsne[1:]
+
+# plt.figure()
+# for i in range(len(tsne)):
+#     for j in range(len(tsne[i])):
+#         plt.scatter(tsne[i][j][0][0], tsne[i][j][0][1] )
+
+# plt.show()
+
 # Evaluate the model :
 # T-SNE
 # MIREVAL
