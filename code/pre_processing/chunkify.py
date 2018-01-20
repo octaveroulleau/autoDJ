@@ -7,19 +7,15 @@ Functions to create chunks from whole tracks
 """
 
 import sys
+import numpy as np
 sys.path.append("pre_processing/")
+sys.path.append("data/")
+import pdb
+import os
 import chunkAudio as ca
 import chunkList as cl
-import numpy as np
 import skimage.transform as skt
-import os
-# import module from autodj_datasets
-# os.chdir("../../../autodj_sets")
-# from data.sets.audio import DatasetAudio
-# os.chdir("../autoDJ/code/pre_processing")
-sys.path.append("../../../autodj_sets/")
 from data.sets.audio import DatasetAudio
-import pdb
 
 
 def load_dataset():

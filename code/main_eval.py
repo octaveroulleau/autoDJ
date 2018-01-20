@@ -101,11 +101,16 @@ X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, 50)
 
 #%% Feed the data forward in the CNN
 model_name = 'genre_full'
+# model_name = 'genre_full_key_full_artist_full'
 model_base, _ = cnn_load.load_CNN_model(model_name)
 X_embed = np.asarray(model_base.predict(X, verbose = 1))
 
-#%% Feed the data to the VAE
-vae_eval.evaluate(X_embed)
+#%% Feed the data to the VAE and evaluate
+model_vae_name = 'vae_genre_full'
+# model_vae_name = 'vae_genre_full_key_full_artist_full'
+vae_eval.plot_perfs(model_vae_name)
+vae_eval.t_sne_cnn_tasks(X_embed, model_vae_name, chunks_list, audioSet)
+# vae_eval.t_sne_toymix(X_embed, model_vae_name, chunks_list, audioSet)
 
 ######################
 # ALL

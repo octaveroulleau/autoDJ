@@ -47,11 +47,9 @@ def build_model(model_type, input_dim, label_dim=[0]):
 	"""Salut l’ami,
 
 Alors je te conseille effectivement de commencer par la et de toujours conserver le couple ReLU et warm-up, après pour les tests judicieux je dirais:
-Beta = [0.5, 1, 4]
 Nombre de couches = [1, 2]
 Nombre de neurones = [800, 2000]
- 	
-TODO : fonction train_vae custom
+
 	"""
 
 	if model_type == "vae": # for Vanilla VAE
@@ -86,10 +84,8 @@ TODO : fonction train_vae custom
 		prior = {"dist":dist.normal, "params":(Variable(torch.Tensor(16).fill_(1), requires_grad=False),
 											   Variable(torch.Tensor(16).zero_(), requires_grad=False))}
 		input_params = {"dim":input_dim, "dist":dist.bernoulli}
-		latent_params = [{"dim":64, "dist":dist.normal}, {"dim":32, "dist":dist.normal}, {"dim":16, "dist":dist.normal, "prior":prior}]
-		hidden_params= [{"dim":800, "nlayers":2, "batch_norm":False},
-						{"dim":400, "nlayers":2, "batch_norm":False},
-						{"dim":200, "nlayers":2, "batch_norm":False}]
+		latent_params = [{"dim":16, "dist":dist.normal, "prior":prior}]
+		hidden_params= [{"dim":800, "nlayers":1, "batch_norm":False}]
 		vae = VanillaDLGM(input_params, latent_params, hidden_params)
 		use_label = False
 
@@ -125,7 +121,7 @@ def train_vae(vae, data, max_epochs=100, batch_size=100, model_type="dlgm", labe
     
 	epoch = -1
 	# Beta = [0.5, 1, 4]
-	beta = 0.5
+	beta = 4
 	logs = [[],[]]
 
 	while epoch < max_epochs:
