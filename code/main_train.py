@@ -3,10 +3,13 @@
 #################################################################
 
 import tensorflow as tf
-import data
 from keras.backend.tensorflow_backend import set_session
 import numpy as np
+import sys
 
+sys.path.append("../../../autodj_sets/")
+# from data.sets.audio import DatasetAudio
+import data
 import similarity_learning.models.dielemann.load as cnn_load
 import pre_processing.load_for_nns as nns_data_load
 import similarity_learning.models.vae.train as vae_train
