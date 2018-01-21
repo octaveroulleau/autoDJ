@@ -103,7 +103,6 @@ def build_full_model(frames,
    
     
     #%%========== Global temporal pooling layer =========
-    pdb.set_trace()
     pool_max = layers.GlobalMaxPooling1D()(conv_3)
     pool_average = layers.GlobalAveragePooling1D()(conv_3)
     pool_LP = layers.Lambda(lambda x:  GlobalLPPooling1D(x))(conv_3)
@@ -209,7 +208,19 @@ def build_conv_layers(frames, freq_bins, mod_options):
     
     return model
 
+#%%
 
+def pool_results(base_model):
+    inputs = base_model.output
+    pool_max = layers.GlobalMaxPooling1D()(inputs)
+    
+    model = Model(inputs = base_model.inputs, outputs = pool_max)
+    model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
+    
+    return model
+
+
+    
 #%%
     
 def add_fc_layers(base_model, mod_options):
@@ -248,26 +259,28 @@ def add_fc_layers(base_model, mod_options):
         The output model. Expects inputs of shape as defined in the base_model 
         and outputs a tensor of shape (batch size, alphabet size).
     '''
-    
     inputs = base_model.output
     
-    #%%========== Global temporal pooling layer =========
-    pool_max = layers.GlobalMaxPooling1D()(inputs)
-    pool_average = layers.GlobalAveragePooling1D()(inputs)
-    pool_LP = layers.Lambda(lambda x:  GlobalLPPooling1D(x))(inputs)
+        #%%========== Global temporal pooling layer =========
+    pool_max = layers.GlobalMaxPooling1D(name = "toto1")(inputs)
+    pool_average = layers.GlobalAveragePooling1D(name = "toto2")(inputs)
+    pool_LP = layers.Lambda(lambda x:  GlobalLPPooling1D(x), name = "toto3")(inputs)
     
-    pool_time = layers.Concatenate()([pool_max, pool_average, pool_LP])
+    pool_time = layers.Concatenate(name = "toto4")([pool_max, pool_average, pool_LP])
+    
+
+
     
     #%%========== FC Layers =========================
-    FC_1 = layers.Dense(mod_options['FC number'], activation = mod_options['activation'])(pool_time)
+    FC_1 = layers.Dense(mod_options['FC number'], activation = mod_options['activation'], name = "toto5")(pool_time)
     if mod_options['batchNormDense']:
-        FC_1 = layers.BatchNormalization()(FC_1)
+        FC_1 = layers.BatchNormalization(name = "toto6")(FC_1)
         
-    FC_2 = layers.Dense(mod_options['FC number'], activation = mod_options['activation'])(FC_1)
+    FC_2 = layers.Dense(mod_options['FC number'], activation = mod_options['activation'], name = "toto7")(FC_1)
     if mod_options['batchNormDense']:
-        FC_2 = layers.BatchNormalization()(FC_2)
+        FC_2 = layers.BatchNormalization(name = "toto8")(FC_2)
         
-    FC_3 = layers.Dense(mod_options['Alphabet size'], activation = 'softmax')(FC_2)
+    FC_3 = layers.Dense(mod_options['Alphabet size'], activation = 'softmax', name = "toto9")(FC_2)
     
 
     
@@ -314,7 +327,7 @@ mod_options = {
         'FC number': 2048,
         'batchNormDense': True,
         'Alphabet size': 10,
-        'Freeze layer': True}
+        'Freeze layer': False}
 
 base_model = build_conv_layers(599, 128, mod_options)
 

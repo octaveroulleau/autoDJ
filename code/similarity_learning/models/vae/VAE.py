@@ -47,16 +47,9 @@ def build_model(model_type, input_dim, label_dim=[0]):
 	"""Salut l’ami,
 
 Alors je te conseille effectivement de commencer par la et de toujours conserver le couple ReLU et warm-up, après pour les tests judicieux je dirais:
-Beta = [0.5, 1, 4]
 Nombre de couches = [1, 2]
 Nombre de neurones = [800, 2000]
 
-- une seule couche cachée a 800 neurones (l'entrée étant de taille 512) 
-- un espace latent de taille 10-15. 
-- des ReLu partout ?
-- warm-up
-
-TODO : fonction train_vae custom
 	"""
 
 	if model_type == "vae": # for Vanilla VAE
@@ -88,13 +81,11 @@ TODO : fonction train_vae custom
 		use_label = True
 
 	if model_type == "autodj": # Custom architecture for PAM auoDJ
-		prior = {"dist":dist.normal, "params":(Variable(torch.Tensor(16).fill_(1), requires_grad=False),
-											   Variable(torch.Tensor(16).zero_(), requires_grad=False))}
+		prior = {"dist":dist.normal, "params":(Variable(torch.Tensor(20).fill_(1), requires_grad=False),
+											   Variable(torch.Tensor(20).zero_(), requires_grad=False))}
 		input_params = {"dim":input_dim, "dist":dist.bernoulli}
-		latent_params = [{"dim":64, "dist":dist.normal}, {"dim":32, "dist":dist.normal}, {"dim":16, "dist":dist.normal, "prior":prior}]
-		hidden_params= [{"dim":800, "nlayers":2, "batch_norm":False},
-						{"dim":400, "nlayers":2, "batch_norm":False},
-						{"dim":200, "nlayers":2, "batch_norm":False}]
+		latent_params = [{"dim":20, "dist":dist.normal, "prior":prior}]
+		hidden_params= [{"dim":800, "nlayers":1, "batch_norm":False}, {"dim":2000, "nlayers":1, "batch_norm":False}]
 		vae = VanillaDLGM(input_params, latent_params, hidden_params)
 		use_label = False
 
@@ -128,14 +119,20 @@ def train_vae(vae, data, max_epochs=100, batch_size=100, model_type="dlgm", labe
 
 	"""
     
-	epoch = -1  
+	epoch = -1
+	# Beta = [0.5, 1, 4]
+	beta = 4
+	logs = [[],[]]
+
 	while epoch < max_epochs:
 		epoch += 1
 		epoch_loss = 0.
 		batch_ids = permutation(len(data)) 
-		for i in range(len(batch_ids)//batch_size):
+		for i in range(len(batch_ids)//batch_size - 1):
 			# load data
-			x = Variable(torch.from_numpy(data[batch_ids[i*batch_size:(i+1)*batch_size]]))
+			x = Variable(torch.from_numpy(data[batch_ids[i*batch_size:(i+1)*batch_size]]).float())
+
+			# not important stuff
 			if model_type == "cvae":
 				labels = Variable(torch.from_numpy(labels[batch_ids[i*batch_size:(i+1)*batch_size]]).float())
 				x = [x, labels]
@@ -144,11 +141,21 @@ def train_vae(vae, data, max_epochs=100, batch_size=100, model_type="dlgm", labe
 				x = x.cuda()
 				
 			# step
-			batch_loss = vae.step(x, epoch, verbose=False, warmup=1, beta=4)
+			batch_loss = vae.step(x, epoch, verbose=False, warmup=1, beta=beta)
 			epoch_loss += batch_loss
-			print("epoch %d / batch %d / lowerbound : %f "%(epoch, i, batch_loss))
+			# print("epoch %d / batch %d / lowerbound : %f "%(epoch, i, batch_loss))
+
+		# validate
+		j = len(batch_ids)//batch_size - 1
+		x_val = Variable(torch.from_numpy(data[batch_ids[j*batch_size:(j+1)*batch_size]]).float())
+		val_loss = vae.validate(x_val, epoch, verbose=False, warmup=1, beta=beta)
+		# print("epoch %d / val_loss : %f "%(epoch, val_loss))
 			
 		print("---- FINAL EPOCH %d LOSS : %f"%(epoch, epoch_loss))
+		logs[0].append(epoch_loss[0])
+		logs[1].append(val_loss[0])
 		
-	return vae
+	return vae, logs
 		
+
+
