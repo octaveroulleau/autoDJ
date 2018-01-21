@@ -103,7 +103,6 @@ def build_full_model(frames,
    
     
     #%%========== Global temporal pooling layer =========
-    pdb.set_trace()
     pool_max = layers.GlobalMaxPooling1D()(conv_3)
     pool_average = layers.GlobalAveragePooling1D()(conv_3)
     pool_LP = layers.Lambda(lambda x:  GlobalLPPooling1D(x))(conv_3)
@@ -209,7 +208,18 @@ def build_conv_layers(frames, freq_bins, mod_options):
     
     return model
 
+#%%
+def pool_results(base_model):
+    inputs = base_model.outputs
+    pool_max = layers.GlobalMaxPooling1D()(inputs)
+    
+    model = Model(inputs = inputs, outputs = pool_max)
+    model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
+    
+    return model
 
+
+    
 #%%
     
 def add_fc_layers(base_model, mod_options):
@@ -251,12 +261,15 @@ def add_fc_layers(base_model, mod_options):
     
     inputs = base_model.output
     
-    #%%========== Global temporal pooling layer =========
+        #%%========== Global temporal pooling layer =========
     pool_max = layers.GlobalMaxPooling1D()(inputs)
     pool_average = layers.GlobalAveragePooling1D()(inputs)
     pool_LP = layers.Lambda(lambda x:  GlobalLPPooling1D(x))(inputs)
     
     pool_time = layers.Concatenate()([pool_max, pool_average, pool_LP])
+    
+
+
     
     #%%========== FC Layers =========================
     FC_1 = layers.Dense(mod_options['FC number'], activation = mod_options['activation'])(pool_time)
@@ -314,7 +327,7 @@ mod_options = {
         'FC number': 2048,
         'batchNormDense': True,
         'Alphabet size': 10,
-        'Freeze layer': True}
+        'Freeze layer': False}
 
 base_model = build_conv_layers(599, 128, mod_options)
 
