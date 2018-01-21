@@ -7,12 +7,36 @@ import skimage.transform as skt
 
 from re_synthesis.const import SR
 from pre_processing.chunkify import track_to_chunks
+import chunkList as cl
 
 def preprocess_for_cnn(audioSet, audioOptions, nb_files):
-	"""
+	""" Loads audio data to feed forward the neural networks.
+
+
+	Parameters
+    ----------
+    audioSet : DatasetAudio object (see data/sets/audio)
+    	Represents the dataset.
+	audioOptions : dict
+		The loading specifications for the dataset
+	nb_files : int
+		The desired number of audio files to load.
+
+    Returns
+    -------
+	X : np array of size nb_chunks x [input_data_dims]
+
+    Example
+    -------
+
+	audioSet, audioOptions = data.import_data.import_data()
+	X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, len(audioSet.files))
+	X_embed = np.asarray(model_cnn.predict(X, verbose = 1))
+
 	"""
 
 	print("Loading audio data, please wait ...")
+	custom_chunk_list = cl.ChunkList()
 
 	for file_id in range(nb_files):
 
@@ -25,6 +49,7 @@ def preprocess_for_cnn(audioSet, audioOptions, nb_files):
 			nbBins = chunk.shape[0]
 			chunk = skt.resize(chunk, (nbBins, 100), mode='reflect')
 			data.append(chunk)
+			custom_chunk_list.add_chunk(chunk)
 
 		if len(chunks) > 0 :
 

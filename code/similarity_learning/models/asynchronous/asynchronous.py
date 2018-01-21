@@ -4,22 +4,42 @@ Created on Tue Jan 16 18:06:21 2018
 
 @author: octav
 """
-
+# import sys
+# sys.path.append('similarity_learning/')
 from similarity_learning.models.asynchronous.task import AsynchronousTask
-from data.sets.audio import DatasetAudio, importAudioData
-#from similarity_learning.models.dielemann.build import *
-import pdb
-import time
 import similarity_learning.models.dielemann.build as build
 import numpy as np
 import keras
 import pickle
 from pre_processing.chunkify import track_to_chunks
 import skimage.transform as skt
+from similarity_learning.models.dielemann.build import GlobalLPPooling1D
+import pdb
 
-
-
-def asyncTaskPointer(idx, dataIn, options):
+def chunk_loader(idx, 
+                 dataIn, 
+                 options):
+    '''
+    task pointer used to load tracks and split them to chunks asynchronously
+    
+    Parameters
+    ----------
+    idx:
+        Track index
+    dataIn:
+        Track filepath
+    options:
+        Dictionnary of options. Must contains:
+            -audioSet: object of type DatasetAudio
+            -frames number: int, defines target resampling frames number
+            -task: string, defines metadata associated with each chunk (artist, genre etc...)
+            -AudioOptions from dataset
+    
+    Returns
+    -------
+    data: list of numpy arrays containing cqt of each chunk
+    meta: list of string containing metadata informations for each chunk
+    '''
 
     audioSet = options['audioSet']
 
@@ -29,8 +49,7 @@ def asyncTaskPointer(idx, dataIn, options):
 
     data = []
     meta = []
-    #print('loading '+ dataIn[idx])
-
+    
     for i in range(len(chunks)):
         chunk = chunks[i].get_cqt(audioSet, options)
         nbBins = chunk.shape[0]
@@ -38,45 +57,79 @@ def asyncTaskPointer(idx, dataIn, options):
         data.append(chunk)
         meta.append(chunks[i].get_meta(audioSet,options['task']))
 
-    #print(str(len(data)) + ' chunks created')
-
-
-
-    """
-    audioSet = options['audioSet']
-
-    audioSet.importMetadataTasks();
-    meta = audioSet.metadata[options["task"]][idx]
-
-    print('loading '+ dataIn[idx])
-    data, meta_trash = importAudioData(dataIn, options)
-
-    #chunks, chunks_meta = Chunks
-    """
-
     return data, meta
 
-def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, model_name, task = "genre", freq_bins = 168, batch_size = 10, nb_epochs = 200):
+def asynchronous_learning(audioSet, 
+                          audioOptions, 
+                          nb_frames, 
+                          model_options, 
+                          model_name,
+                          task = "genre", 
+                          freq_bins = 168, 
+                          batch_size = 10, 
+                          nb_epochs = 200,
+                          transfer_learning = False,
+                          model_base_name = None):
+    '''
+    Trains a dielemann model using asynchronous processing for loading tracks. 
+    The training rely on a audioSet as defined in DatasetAudio.
+    
+    Parameters
+    ----------
+    audioSet:
+        DatasetAudio: dataset to train our model
+    audioOptions: 
+        dict: our dataset options and transform options
+    nb_frames:
+        int: target resampling size for each chunk
+    model_options:
+        dict: our model options: see similarity_learning/models/dielemann/build 
+              for infos
+    model_name:
+        string: name of our model
+    task (optionnal):
+        string: type of metadata used to train the model
+    freq_bins (optionnal):
+        do not change
+    batch_size(optionnal):
+        int: number of tracks per batch
+    nb_epochs(optionnal):
+        int: number of epochs for training. The algorithm uses early stopping 
+             for optimisation, changing this value is not necessary unless required 
+    '''
 
     print('batch_size:'+str(batch_size))
-    asyncTask = AsynchronousTask(asyncTaskPointer, numWorkers = 2, batchSize = batch_size, shuffle = True)
+    asyncTask = AsynchronousTask(chunk_loader, 
+                                 numWorkers = 2, 
+                                 batchSize = batch_size, 
+                                 shuffle = True)
+    #add options
     options = audioOptions
     options["audioSet"] = audioSet
     options["task"] = task
     options["frames number"] = nb_frames
     alphabet_size = len(set(audioSet.metadata[task]))
-
     model_options["Alphabet size"] = alphabet_size
-
-    model_base = build.build_conv_layers(nb_frames, freq_bins, model_options)
-    model_full = build.add_fc_layers(model_base, model_options)
+    
+    #build dielemann model
+    if transfer_learning == False:
+        model_base = build.build_conv_layers(nb_frames, freq_bins, model_options)
+        model_full = build.add_fc_layers(model_base, model_options)
+    elif transfer_learning == True and model_base_name != None:
+        # pdb.set_trace()
+        model_base_path = './similarity_learning/models/dielemann/saved_models/'+model_base_name+'_base.h5'
+        model_base = keras.models.load_model(model_base_path)
+        model_name = model_base_name + model_name
+        model_full = build.add_fc_layers(model_base, model_options)
 
     history_list = {}
-
+    
+    #start training asynchronous
     for epoch in range(nb_epochs):
         asyncTask.createTask(audioSet.files, options)
         print('Epoch #' + str(epoch));
         for batchIDx, (currentData, currentMeta) in enumerate(asyncTask):
+            #prevent errors from tracks with no downbeat annotations
             a = len(currentData)
             if a !=0:
 
@@ -91,7 +144,9 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
         '''
         '''
         print('Finished epoch #'+str(epoch))
-
+              
+        #early stopping based on validation loss, change patience to increase 
+        #or decrease waiting time until stopping
         if epoch == 0:
             model_full_saved = model_full
             model_base_saved = model_base
@@ -120,12 +175,23 @@ def asynchronous_learning(audioSet, audioOptions, nb_frames, model_options, mode
         if wait_time == patience:
             break
 
-
+    print('train ok')
     save_model(model_full_saved, model_base_saved, model_options, history_list_saved, model_name)
-    return 0#model_full, model_base
 
 def reshape_data(currentData, currentMeta, alphabet_size):
-    #currentData is size (nb_chunks,batchSize,freq,frames)
+    '''
+    Reshape data coming from the chunk_loader function to fit the model's 
+    expectations
+    
+    Parameters
+    ----------
+    currentData:
+        array: data to process
+    currentMeta:
+        list: metadata associated (expected output of the model)
+    alphabet_size:
+        int: number of different outputs possible
+    '''
     batch_size = currentData[0].shape[0]
     data = np.zeros(((len(currentData))*batch_size, currentData[0].shape[1], currentData[0].shape[2]))
     meta = np.zeros((len(currentMeta))*batch_size)
@@ -143,25 +209,21 @@ def save_model(model_full,
               model_options,
               history,
               name,
-              pathmodel='./similarity_learning/models/dielemann/models/'):
+              pathmodel='./similarity_learning/models/dielemann/saved_models/'):
     '''
-    Save a model (named with name and the actual date) in the required ./models
-    directory.
+    Save a model, its base, its otpions and its history in the required
+    directory. For each new model name, a new repositiry will be created
 
     Parameters
     ----------
-    model: keras.model
+    model_full: keras.model
         Model to save
-    name: string
-        Name of the model
+    model_base: keras.model
+        Base CNN of the model
     pathmodel (optionnal): string
         Path to the models repository
-
-    Returns
-    -------
-    model: keras.model
-        The model we saved.
     '''
+    
     print('Save model to ...')
     filepath_base = pathmodel + name + '_base.h5'
     filepath_full = pathmodel + name + '_full.h5'
@@ -228,6 +290,7 @@ def save_model(model_full,
         model_base.save(filepath_base)
         print('Base model saved in '+ filepath_base)
 
+        print('base model saved ok')
         print('Save full model as ' + name + '_full.h5' + '...')
         model_full.save(filepath_full)
         print('Base model saved in '+ filepath_full)

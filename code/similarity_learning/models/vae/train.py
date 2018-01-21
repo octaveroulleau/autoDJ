@@ -21,7 +21,7 @@ import VAE
 import numpy as np
 import pickle
 
-def train_and_save(data, max_epochs, test_name = 'test_train_vae_cnn'):
+def train_and_save(data, max_epochs,test_name = 'test_train_vae_cnn'):
 	""" Trains the VAE model on the given dataset and saves it as a .t7 serialized object.
 
 	Parameters
@@ -44,7 +44,7 @@ def train_and_save(data, max_epochs, test_name = 'test_train_vae_cnn'):
 	nb_chunks = data.shape[0]
 
 	#%% Make model
-	model_type="autodj"
+	model_type="autodj" #dlgm, autodj
 	_, vae = VAE.build_model(model_type, input_dim)
 
 	#%% Defining optimizer
@@ -56,7 +56,7 @@ def train_and_save(data, max_epochs, test_name = 'test_train_vae_cnn'):
 	    vae.cuda()
 
 	#%% Define training setting and train
-	batch_size=100
+	batch_size=50
 	vae, logs = VAE.train_vae(vae, data, max_epochs=max_epochs, batch_size=batch_size, model_type=model_type, use_cuda=use_cuda)
 
 	#%% Save model to saved_models once trained

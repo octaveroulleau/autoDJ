@@ -5,4 +5,5 @@ Created on Fri Jan 19 14:28:11 2018
 @author: octav
 """
 
-def t_sne
+def t_sne():
+	return 0

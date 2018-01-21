@@ -262,25 +262,25 @@ def add_fc_layers(base_model, mod_options):
     inputs = base_model.output
     
         #%%========== Global temporal pooling layer =========
-    pool_max = layers.GlobalMaxPooling1D()(inputs)
-    pool_average = layers.GlobalAveragePooling1D()(inputs)
-    pool_LP = layers.Lambda(lambda x:  GlobalLPPooling1D(x))(inputs)
+    pool_max = layers.GlobalMaxPooling1D(name = "toto1")(inputs)
+    pool_average = layers.GlobalAveragePooling1D(name = "toto2")(inputs)
+    pool_LP = layers.Lambda(lambda x:  GlobalLPPooling1D(x), name = "toto3")(inputs)
     
-    pool_time = layers.Concatenate()([pool_max, pool_average, pool_LP])
+    pool_time = layers.Concatenate(name = "toto4")([pool_max, pool_average, pool_LP])
     
 
 
     
     #%%========== FC Layers =========================
-    FC_1 = layers.Dense(mod_options['FC number'], activation = mod_options['activation'])(pool_time)
+    FC_1 = layers.Dense(mod_options['FC number'], activation = mod_options['activation'], name = "toto5")(pool_time)
     if mod_options['batchNormDense']:
-        FC_1 = layers.BatchNormalization()(FC_1)
+        FC_1 = layers.BatchNormalization(name = "toto6")(FC_1)
         
-    FC_2 = layers.Dense(mod_options['FC number'], activation = mod_options['activation'])(FC_1)
+    FC_2 = layers.Dense(mod_options['FC number'], activation = mod_options['activation'], name = "toto7")(FC_1)
     if mod_options['batchNormDense']:
-        FC_2 = layers.BatchNormalization()(FC_2)
+        FC_2 = layers.BatchNormalization(name = "toto8")(FC_2)
         
-    FC_3 = layers.Dense(mod_options['Alphabet size'], activation = 'softmax')(FC_2)
+    FC_3 = layers.Dense(mod_options['Alphabet size'], activation = 'softmax', name = "toto9")(FC_2)
     
 
     

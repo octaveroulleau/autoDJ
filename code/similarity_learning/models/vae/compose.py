@@ -75,6 +75,7 @@ def compose_line(data):
 	
 	# For each point of the line, find its nearest neighbor in the embedded dataset
 	idx_nearest_chunks = np.argmin(cdist(discrete_line,embedded_data),1) 
+	print("Chunks on the path :", idx_nearest_chunks)
 	# test_create_line(nb_chunks_mix,a[:3],b[:3])
 	return idx_nearest_chunks
 
@@ -106,7 +107,7 @@ def create_discrete_line(dim_embedd_space, nb_chunks_mix,a,b):
 	"""
 
 	# Sample nb_chunks_mix points from the line
-	t = np.sort(np.random.rand(nb_chunks_mix))
+	t = np.linspace(0,1,nb_chunks_mix)
 	t = np.tile(t,(dim_embedd_space,1))
 	discrete_line = a[:,np.newaxis]*t + b[:,np.newaxis]*(1-t)
 	discrete_line = np.transpose(discrete_line)

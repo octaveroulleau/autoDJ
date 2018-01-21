@@ -10,7 +10,7 @@ import pickle
 import similarity_learning.models.dielemann.build as build
 
 #%%
-def load_CNN_model(model_name, base_dir = './similarity_learning/models/dielemann/models/', model_type = 'base'):
+def load_CNN_model(model_name, base_dir = './similarity_learning/models/dielemann/saved_models/', model_type = 'base'):
     filepath_model = base_dir + model_name + '_'+model_type+'.h5'
     filepath_options = base_dir + model_name + '_options'
     

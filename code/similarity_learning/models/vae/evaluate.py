@@ -1,36 +1,26 @@
 """ ################# Evaluation mode. ################
-1. Defnition of a custom score : distance between two consecutive chunks of a track should be minimal
-2. Evaluate score on the training dataset
+2. Using training history, evaluate score on the training dataset (+ validation)
 3. Use T-SNE to visually check coherence of the embedding space
 
 @author: laure
 
 """
 
-# Use toymix !!! (chunk by chunk)
-
 import sys
 sys.path.append('similarity_learning/models/vae/')
+import VAE
+import visualize.plot_vae.dimension_reduction as dr
 
 import numpy as np
-import visualize.plot_vae.dimension_reduction as dr
-import VAE
-
-from scipy.spatial.distance import cdist
 import torch
 from torch.autograd import Variable
 from sklearn.manifold import TSNE
-
-import mixing_point as mp
-
 import matplotlib.pyplot as plt
-
 import pickle
 
-def forward(cnn_data, model):
-	""" Input training set in CNN's feature space
-	Output the same set in the VAE's latent space
-	"""
+np.set_printoptions(threshold=np.nan)
+
+
 
 def score_vae(model):
 	"""
@@ -46,6 +36,8 @@ def t_sne_toymix(data, model_name):
 	Plots tracks as paths.
 	"""
 
+	# TODO
+	
 	# Load a pre-trained VAE
 	dirpath = 'similarity_learning/models/vae/'
 	vae = VAE.load_vae(dirpath + 'saved_models/' + model_name + '.t7')
@@ -77,21 +69,13 @@ def t_sne_cnn_tasks(data, model_name, chunks_list, audioSet):
 	print("... TSNE performed.")
 
 	# Collect information about each chunk
-	track_ids = [ch.track_id for ch in chunks_list.list_of_chunks]
-	genres = [audioSet.metadata["genre"][tid] for tid in track_ids]
-	artists = [audioSet.metadata["artist"][tid] for tid in track_ids]
-	keys = [audioSet.metadata["key"][tid] for tid in track_ids]
-	genre_label = [float(x)/max(genres) for x in genres]
-	
-	# cmap=plt.cm.spectral
-	cmap = plt.get_cmap("Reds")
-	my_colors = cmap(genre_label)
+	track_ids = [ch.track_id for ch in chunks_list.list_of_chunks][:nb_chunks_total]
+	genres = [audioSet.metadata["genre"][tid] for tid in track_ids][:nb_chunks_total]
+	artists = [audioSet.metadata["artist"][tid] for tid in track_ids][:nb_chunks_total]
+	keys = [audioSet.metadata["key"][tid] for tid in track_ids][:nb_chunks_total]
 
 	# Create a scatter plot.
-	f = plt.figure(figsize=(8, 8))
-	plt.scatter(data_reduced[:,0], data_reduced[:,1], c=my_colors, cmap=cmap, edgecolor='k') # sizes=sizes, , alpha = 0.3 plt.cm.spectral
-	# plt.xlim(-25, 25)
-	# plt.ylim(-25, 25)
+	plt.scatter(data_reduced[:,0], data_reduced[:,1], c=artists, cmap=plt.cm.spectral, edgecolor='k') # alpha = 0.3  
 	plt.axis('off')
 	plt.axis('tight')
 	plt.show()
