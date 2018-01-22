@@ -7,17 +7,14 @@ Functions to create chunks from whole tracks
 """
 
 import sys
+import numpy as np
 sys.path.append("pre_processing/")
+sys.path.append("data/")
+import pdb
+import os
 import chunkAudio as ca
 import chunkList as cl
-import numpy as np
 import skimage.transform as skt
-import os
-# import module from autodj_datasets
-# os.chdir("../../../autodj_sets")
-# from data.sets.audio import DatasetAudio
-# os.chdir("../autoDJ/code/pre_processing")
-sys.path.append("../../../autodj_sets/")
 from data.sets.audio import DatasetAudio
 
 
@@ -73,7 +70,7 @@ def track_to_chunks(track_id, Fs, downbeat):
     """
     chunks = [] # future list of chunks
     
-    for i in range(downbeat.size-1):
+    for i in range(len(downbeat)-1):
         echantillon_debut = int(round(downbeat[i]*Fs))
         echantillon_fin = int(round(downbeat[i+1]*Fs))
         

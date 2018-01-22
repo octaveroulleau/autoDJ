@@ -46,24 +46,6 @@ class VanillaVAE(nn.Module):
         phidden_dec = dict(phidden); phidden_dec['batch_norm'] = False
         return nn.ModuleList([VariationalLayer(platent, pinput, phidden, nn_lin="ReLU", name="vae_decoder")])
         
-    # pyro methods               
-    def model(self, x):
-        raise NotImplementedError("don't use it plzz")
-        pyro.module("decoder", self.decoders)
-        # gerer params prior
-        z_mu = ng_zeros([x.size(0), self.platent["dim"]], type_as=x.data)
-        z_sigma = ng_ones([x.size(0), self.platent["dim"]], type_as=x.data)
-        z = pyro.sample("latent",self.platent["dist"], z_mu, z_sigma)
-        decoder_out = self.decoder.forward(z)
-        if type(decoder_out)!=tuple:
-            decoder_out = (decoder_out, )
-        if pinput["dist"] == dist.normal:
-            decoder_out = list(decoder_out)
-            decoder_out[1] = torch.exp(decoder_out[1])
-            decoder_out = tuple(decoder_out)
-            
-        pyro.sample("obs", self.pinput["dist"], obs=x.view(-1, self.pinput["dim"]), *decoder_out)
-        
     def guide(self, x):
         raise NotImplementedError("don't use it plzz")
         pyro.module("encoder", self.encoders)
@@ -118,6 +100,16 @@ class VanillaVAE(nn.Module):
             if useCuda:
                 global_loss = global_loss.cpu()
             return global_loss.data.numpy()
+
+    def validate(self, x, epoch, verbose=True, beta=1.0, warmup = 1., useCuda=False):
+            beta = beta*epoch/warmup
+            x_params, z_params, z = self.forward(x)
+            global_loss, rec_loss, kld_loss = self.loss(x, x_params, z_params, beta=beta)
+            if verbose:
+                print("val_loss : %f"%(global_loss.data.numpy()))
+            if useCuda:
+                global_loss = global_loss.cpu()
+            return rec_loss.data.numpy()
         
     def save(self, filename, withDataset=False, cuda=False):
         if cuda:
