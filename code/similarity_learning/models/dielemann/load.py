@@ -22,6 +22,6 @@ def load_CNN_model(model_name, base_dir = './similarity_learning/models/dieleman
         
     
     print(model_name+'_'+model_type+' loaded')
-    return model, model_options
+    return model
     
     

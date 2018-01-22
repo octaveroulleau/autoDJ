@@ -44,7 +44,7 @@ def train_and_save(data, max_epochs,test_name = 'test_train_vae_cnn'):
 	nb_chunks = data.shape[0]
 
 	#%% Make model
-	model_type="autodj" #dlgm, autodj
+	model_type="dlgm" #dlgm, autodj
 	_, vae = VAE.build_model(model_type, input_dim)
 
 	#%% Defining optimizer

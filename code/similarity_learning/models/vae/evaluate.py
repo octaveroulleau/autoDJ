@@ -10,6 +10,7 @@ import sys
 sys.path.append('similarity_learning/models/vae/')
 import VAE
 import visualize.plot_vae.dimension_reduction as dr
+import similarity_learning.models.dielemann.load as cnn_load
 
 import numpy as np
 import torch
@@ -45,27 +46,55 @@ def t_sne_toymix(data, model_name):
 	#dr.plot_latent3(dataset, vae, n_points=10000, method=dr.latent_pca, task="class", layer=1)
 	
 
-def t_sne_cnn_tasks(data, model_name, chunks_list, audioSet):
+def t_sne_cnn_tasks(data, chunks_list, audioSet):
 	"""
-	Plots a representation of the training data in the latent space using t-sne dimensionality reduction.
-	Plots each chunk along with its label : one plot for genre, one for artist, one for key.
+	This script evaluates the classification performances of the VAE trained on specific embedding spaces.
+	For this, we use the CNN models trained specifically on a task : genre, artist or key recognition.
+	We plot a representation of the training data in the latent space using t-sne dimensionality reduction.
+	Plots each chunk as a point : one plot for genre, one for artist, one for key.
 	"""
 
-	# Load a pre-trained VAE
+	# Load pre-trained CNNs
+	cnn_genre = cnn_load.load_CNN_model('genre_full')
+	cnn_artist = cnn_load.load_CNN_model('artist_full')
+	cnn_key = cnn_load.load_CNN_model('key_full')
+	cnn_all = cnn_load.load_CNN_model('genre_full_artist_full_key_full')
+
+	# Perform a forward pass to project to the CNN's embedding spaces
+	data_genre = Variable(torch.from_numpy(np.asarray(cnn_genre.predict(data))))
+	data_artist = Variable(torch.from_numpy(np.asarray(cnn_artist.predict(data))))
+	data_key = Variable(torch.from_numpy(np.asarray(cnn_key.predict(data))))
+	data_all = Variable(torch.from_numpy(np.asarray(cnn_all.predict(data))))
+
+	# Load the pre-trained VAEs
 	dirpath = 'similarity_learning/models/vae/'
-	vae = VAE.load_vae(dirpath + 'saved_models/' + model_name + '.t7')
+	vae_genre = VAE.load_vae(dirpath + 'saved_models/' + 'vae_genre_full' + '.t7')
+	vae_artist = VAE.load_vae(dirpath + 'saved_models/' + 'vae_genre_full' + '.t7') # vae_artist_full
+	vae_key = VAE.load_vae(dirpath + 'saved_models/' + 'vae_key_full' + '.t7')
+	vae_all = VAE.load_vae(dirpath + 'saved_models/' + 'vae_genre_full_artist_full_key_full' + '.t7')
 
-	# Perform forward pass to project to the embedding space
-	x = Variable(torch.from_numpy(data))
-	x_params, z_params, z  = vae.forward(x)
-	embedded_data = z[-1].data.numpy()
-	dim_embedd_space = embedded_data.shape[1]
-	nb_chunks_total = embedded_data.shape[0]
+	# Perform forward pass to project to the VAE's embedding spaces
+	print('Projecting to embedding space ...')
+	_, _, z_genre  = vae_genre.forward(data_genre)
+	embedded_data_genre = z_genre[-1].data.numpy()
+	_, _, z_artist  = vae_artist.forward(data_artist)
+	embedded_data_artist = z_artist[-1].data.numpy()	
+	_, _, z_key  = vae_key.forward(data_key)
+	embedded_data_key = z_key[-1].data.numpy()	
+	_, _, z_all  = vae_all.forward(data_all)
+	embedded_data_all = z_all[-1].data.numpy()
+
+	dim_embedd_space = embedded_data_genre.shape[1]
+	nb_chunks_total = embedded_data_genre.shape[0]
+	print('Done.')
 
 	# Proceed to dimensionality reduction
 	print("TSNE performing ...")
 	RS = 20150101
-	data_reduced = TSNE(2, random_state=RS).fit_transform(embedded_data)
+	data_reduced_genre = TSNE(2, random_state=RS).fit_transform(embedded_data_genre)
+	data_reduced_artist = TSNE(2, random_state=RS+1).fit_transform(embedded_data_artist)
+	data_reduced_key = TSNE(2, random_state=RS-1).fit_transform(embedded_data_key)
+	data_reduced_all = TSNE(2, random_state=RS-1).fit_transform(embedded_data_all)
 	print("... TSNE performed.")
 
 	# Collect information about each chunk
@@ -75,11 +104,33 @@ def t_sne_cnn_tasks(data, model_name, chunks_list, audioSet):
 	keys = [audioSet.metadata["key"][tid] for tid in track_ids][:nb_chunks_total]
 
 	# Create a scatter plot.
-	plt.scatter(data_reduced[:,0], data_reduced[:,1], c=artists, cmap=plt.cm.spectral, edgecolor='k') # alpha = 0.3  
-	plt.axis('off')
-	plt.axis('tight')
+	f, ((a1, a2), (a3, a4)) = plt.subplots(2, 2)
+	a1.scatter(data_reduced_genre[:,0], data_reduced_genre[:,1], c=genres, cmap=plt.cm.spectral, edgecolor='k') # alpha = 0.3  
+	a1.axis('off')
+	a1.axis('tight')
+	a1.set_title('Genre on genres')
+
+	a2.scatter(data_reduced_genre[:,0], data_reduced_genre[:,1], c=artists, cmap=plt.cm.spectral, edgecolor='k') # alpha = 0.3  
+	a2.axis('off')
+	a2.axis('tight')
+	a2.set_title('Genre on artists')
+
+	a3.scatter(data_reduced_artist[:,0], data_reduced_artist[:,1], c=artists, cmap=plt.cm.spectral, edgecolor='k') # alpha = 0.3  
+	a3.axis('off')
+	a3.axis('tight')
+	a3.set_title('Artists on artists')
+
+	a4.scatter(data_reduced_key[:,0], data_reduced_key[:,1], c=keys, cmap=plt.cm.spectral, edgecolor='k') # alpha = 0.3  
+	a4.axis('off')
+	a4.axis('tight')
+	a4.set_title('Keys on keys')
+
+	# plt.legend()
 	plt.show()
-	
+
+	plt.scatter(data_reduced_genre[:,0], data_reduced_genre[:,1], c=genres, cmap=plt.cm.spectral, edgecolor='k')
+	plt.show()
+
 
 def plot_perfs(model_name):
 
