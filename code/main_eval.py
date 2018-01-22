@@ -44,4 +44,3 @@ data = np.random.rand(nb_chunks,input_dim).astype('float32')
 idx_nearest_chunks = vae_eval.evaluate(data)
 # Evaluate the model :
 # T-SNE
-# MIREVAL
