@@ -23,6 +23,11 @@ from re_synthesis.const import SR
 
 from similarity_learning.models.vae import VAE
 
+#######################
+# DOWNBEATS EVALUATION
+#######################
+
+downbeat_evaluation()
 
 #######################
 # CNN EVALUATION
