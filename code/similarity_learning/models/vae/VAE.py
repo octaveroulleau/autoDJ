@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 from pyro import distributions as dist
 from numpy.random import permutation
 from models.vaes import VanillaVAE, VanillaDLGM, ConditionalVAE
+
+import pdb
 		
 def build_model(model_type, input_dim, label_dim=[0]):
 	""" Allows one to easily build a vae model by selecting one of preset models.
@@ -121,7 +123,7 @@ def train_vae(vae, data, max_epochs=100, batch_size=100, model_type="dlgm", labe
     
 	epoch = -1
 	# Beta = [0.5, 1, 4]
-	beta = 4
+	beta = 1
 	logs = [[],[]]
 
 	while epoch < max_epochs:
@@ -141,6 +143,7 @@ def train_vae(vae, data, max_epochs=100, batch_size=100, model_type="dlgm", labe
 				x = x.cuda()
 				
 			# step
+			# pdb.set_trace()
 			batch_loss = vae.step(x, epoch, verbose=False, warmup=1, beta=beta)
 			epoch_loss += batch_loss
 			# print("epoch %d / batch %d / lowerbound : %f "%(epoch, i, batch_loss))
@@ -152,7 +155,10 @@ def train_vae(vae, data, max_epochs=100, batch_size=100, model_type="dlgm", labe
 		# print("epoch %d / val_loss : %f "%(epoch, val_loss))
 			
 		print("---- FINAL EPOCH %d LOSS : %f"%(epoch, epoch_loss))
-		logs[0].append(epoch_loss[0])
+		# Normalize loss against the size of the data
+		size_train = len(batch_ids)//batch_size - 1
+		logs[0].append(epoch_loss[0]/size_train)
+		# logs[0].append(epoch_loss[0])
 		logs[1].append(val_loss[0])
 		
 	return vae, logs

@@ -14,12 +14,12 @@ from keras.backend.tensorflow_backend import set_session
 import similarity_learning.models.asynchronous.asynchronous as asyn
 from similarity_learning.models.asynchronous.asynchronous import asynchronous_learning
 
-#%% Load data
-audioSet, audioOptions = data.import_data.import_data()
+# #%% Load data
+# audioSet, audioOptions = data.import_data.import_data()
 
-#%% Pre-process data
-X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, len(audioSet.files)) # len(audioSet.files)
-print('Dataset loaded.')
+# #%% Pre-process data
+# X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, 150) # len(audioSet.files) 150
+# print('Dataset loaded.')
 
 # #%% Train CNNs asynchronously + save model
 # # Here an example with the artist recognition task on top of a genre recognition CNN (transfer learning)
@@ -42,8 +42,15 @@ print('Dataset loaded.')
 
 
 #%% Train VAE + save model
-model_name = 'genre_full_artist_full_key_full' # 'artist_full'
-model_cnn = cnn_load.load_CNN_model(model_name)
+# model_name = 'key_full' # 'genre_full_artist_full_key_full' # 'artist_full'
+# model_cnn = cnn_load.load_CNN_model(model_name)
 
-X_embed = np.asarray(model_cnn.predict(X, verbose = 1))
-vae_train.train_and_save(X_embed, 20, 'vae_genre_full_artist_full_key_full')  # max_epochs = 1000
+# X_embed = np.asarray(model_cnn.predict(X, verbose = 1))
+# np.set_printoptions(threshold=np.nan)
+# print(X_embed)
+# print("Min : ", np.amin(X_embed))
+# print("Max : ", np.amax(X_embed))
+# print("Must be True :", np.isfinite(X_embed).all())
+# print("Must be False : ", np.isnan(X_embed).any())
+X_embed = np.random.rand(200,200)
+vae_train.train_and_save(X_embed, 20, 'vae_fake')  # max_epochs = 1000

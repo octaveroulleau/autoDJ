@@ -100,37 +100,56 @@ def t_sne_cnn_tasks(data, chunks_list, audioSet):
 	# Collect information about each chunk
 	track_ids = [ch.track_id for ch in chunks_list.list_of_chunks][:nb_chunks_total]
 	genres = [audioSet.metadata["genre"][tid] for tid in track_ids][:nb_chunks_total]
-	artists = [audioSet.metadata["artist"][tid] for tid in track_ids][:nb_chunks_total]
-	keys = [audioSet.metadata["key"][tid] for tid in track_ids][:nb_chunks_total]
+	genres_labels = [[key for key, value in audioSet.classes["genre"].iteritems() if value == i] for i in genres]
 
-	# Create a scatter plot.
-	f, ((a1, a2), (a3, a4)) = plt.subplots(2, 2)
-	a1.scatter(data_reduced_genre[:,0], data_reduced_genre[:,1], c=genres, cmap=plt.cm.spectral, edgecolor='k') # alpha = 0.3  
+	print("check length : ", len(genres) == len(genres_labels))
+	print(genres_labels)
+
+	artists = [audioSet.metadata["artist"][tid] for tid in track_ids][:nb_chunks_total]
+	artists_labels = [[key for key, value in audioSet.classes["artist"].iteritems() if value == i] for i in artists]
+	keys = [audioSet.metadata["key"][tid] for tid in track_ids][:nb_chunks_total]
+	keys_labels = [[key for key, value in audioSet.classes["key"].iteritems() if value == i] for i in keys]
+
+	# Create a scatter plot for specialized VAEs.
+	f, (a1, a2, a3) = plt.subplots(1, 3)
+	a1.scatter(data_reduced_genre[:,0], data_reduced_genre[:,1], c=genres, cmap=plt.cm.spectral, label =genres_labels, edgecolor='k') # alpha = 0.3  
 	a1.axis('off')
 	a1.axis('tight')
-	a1.set_title('Genre on genres')
+	a1.set_title('VAE with genre recognition CNN')
 
-	a2.scatter(data_reduced_genre[:,0], data_reduced_genre[:,1], c=artists, cmap=plt.cm.spectral, edgecolor='k') # alpha = 0.3  
+	a2.scatter(data_reduced_key[:,0], data_reduced_key[:,1], c=keys, cmap=plt.cm.spectral, label=keys_labels, edgecolor='k') # alpha = 0.3  
 	a2.axis('off')
 	a2.axis('tight')
-	a2.set_title('Genre on artists')
+	a2.set_title('VAE with key recognition CNN')
 
-	a3.scatter(data_reduced_artist[:,0], data_reduced_artist[:,1], c=artists, cmap=plt.cm.spectral, edgecolor='k') # alpha = 0.3  
+	a3.scatter(data_reduced_artist[:,0], data_reduced_artist[:,1], c=artists, cmap=plt.cm.spectral, label = artists_labels, edgecolor='k') # alpha = 0.3  
 	a3.axis('off')
 	a3.axis('tight')
-	a3.set_title('Artists on artists')
+	a3.set_title('VAE with artist recognition CNN')
 
-	a4.scatter(data_reduced_key[:,0], data_reduced_key[:,1], c=keys, cmap=plt.cm.spectral, edgecolor='k') # alpha = 0.3  
-	a4.axis('off')
-	a4.axis('tight')
-	a4.set_title('Keys on keys')
+	# plt.legend()
+	# a1.legend() ?
+	plt.show()
+
+	# Create a scatter plot for general VAE.
+	f, (a1, a2, a3) = plt.subplots(1, 3)
+	a1.scatter(data_reduced_all[:,0], data_reduced_all[:,1], c=genres, cmap=plt.cm.spectral, label =genres_labels, edgecolor='k') # alpha = 0.3  
+	a1.axis('off')
+	a1.axis('tight')
+	a1.set_title('VAE with genre recognition CNN')
+
+	a2.scatter(data_reduced_all[:,0], data_reduced_all[:,1], c=keys, cmap=plt.cm.spectral, label=keys_labels, edgecolor='k') # alpha = 0.3  
+	a2.axis('off')
+	a2.axis('tight')
+	a2.set_title('VAE with key recognition CNN')
+
+	a3.scatter(data_reduced_all[:,0], data_reduced_all[:,1], c=artists, cmap=plt.cm.spectral, label = artists_labels, edgecolor='k') # alpha = 0.3  
+	a3.axis('off')
+	a3.axis('tight')
+	a3.set_title('VAE with artist recognition CNN')
 
 	# plt.legend()
 	plt.show()
-
-	plt.scatter(data_reduced_genre[:,0], data_reduced_genre[:,1], c=genres, cmap=plt.cm.spectral, edgecolor='k')
-	plt.show()
-
 
 def plot_perfs(model_name):
 
