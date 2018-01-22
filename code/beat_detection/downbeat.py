@@ -7,6 +7,8 @@ Downbeat detection
 """
 
 import madmom
+import mir_eval
+import numpy as np
 
 def downbeat_detection(track_path, beats_per_bar = 4):
     proc = madmom.features.DBNDownBeatTrackingProcessor(beats_per_bar, fps=100)
@@ -19,6 +21,19 @@ def downbeat_detection(track_path, beats_per_bar = 4):
             downbeats.append(b[0])
             
     return downbeats
+
+def downbeat_evaluation(files_list, reference_downbeats):
+    f_measure_list = []
+    for i in range(len(files_list)-1):
+        print "====== File " + str(i) + " ======"
+        estimated_downbeats = downbeat_detection(files_list[i])
+#        print reference_downbeats[i]
+#        print estimated_downbeats
+        f_measure = mir_eval.beat.f_measure(reference_downbeats[i][0], np.array(estimated_downbeats))
+#        print f_measure
+        f_measure_list.append(f_measure)
+    
+    return f_measure_list
 
 def filter_multiple_occ(downbeats):
     filtered_downbeats = [downbeats[0]]
