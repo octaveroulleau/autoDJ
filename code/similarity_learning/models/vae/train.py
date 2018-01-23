@@ -50,7 +50,7 @@ def train_and_save(data, max_epochs, test_name = 'test_train_vae_cnn'):
 	_, vae = VAE.build_model(model_type, input_dim)
 
 	#%% Defining optimizer
-	trainingOptions = {'lr':1e5} #1e-4
+	trainingOptions = {'lr':1e-5} #1e-4
 	vae.init_optimizer(usePyro=False, optimArgs=trainingOptions)
 
 	use_cuda = False

@@ -33,6 +33,9 @@ def preprocess_for_cnn(audioSet, audioOptions, nb_files):
 	X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, len(audioSet.files))
 	X_embed = np.asarray(model_cnn.predict(X, verbose = 1))
 
+	TODO : it would actually be better not to do this operation each time. Instead,
+	write the output to a pickle file and load directly the file.
+
 	"""
 
 	print("Loading audio data, please wait ...")

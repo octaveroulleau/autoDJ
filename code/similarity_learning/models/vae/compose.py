@@ -52,8 +52,8 @@ def compose_line(data):
 	nb_chunks_mix = 10
 
 	# Load a pre-trained VAE
-	filepath = 'similarity_learning/models/vae/saved_models/test_spec_softplus.t7'
-	vae = VAE.load_vae(filepath)
+	dirpath = 'similarity_learning/models/vae/'
+	vae = VAE.load_vae(dirpath + 'saved_models/' + 'vae_genre_full_artist_full_key_full' + '.t7')
 
 	# Perform a forward pass to project data to the embedding space
 	x = Variable(torch.from_numpy(data))

@@ -11,13 +11,19 @@ import pre_processing.load_for_nns as nns_data_load
 import pre_processing.chunkify as pr
 from re_synthesis.const import SR
 
+# #%% Load audio data and pre-process
+# audioSet, audioOptions = data.import_data.import_data()
+# chunks_list = pr.dataset_to_chunkList(audioSet, int(SR))
+# X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, 450) # 150 len(audioSet.files)
 
+# #######################
+# # CNN EVALUATION
+# #######################
 
-#######################
-# CNN EVALUATION
-#######################
-
-# Feed the data forward in the CNN
+# #%% Feed the data forward in the CNN
+# model_name = 'genre_full_artist_full_key_full'
+# model_base = cnn_load.load_CNN_model(model_name)
+# X_embed = np.asarray(model_base.predict(X, verbose = 1))
 
 # Evaluate the model :
 # T-SNE
@@ -31,19 +37,9 @@ from re_synthesis.const import SR
 # T-SNE
 # MIREVAL
 
-# #%% Load audio data and pre-process
-# audioSet, audioOptions = data.import_data.import_data()
-# chunks_list = pr.dataset_to_chunkList(audioSet, int(SR))
-# X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, 150)
-
-# #%% Feed the data forward in the CNN
-# model_name = 'genre_full_artist_full_key_full'
-# model_base = cnn_load.load_CNN_model(model_name)
-# X_embed = np.asarray(model_base.predict(X, verbose = 1))
-
-#%% Feed the data to the VAE and evaluate
-# model_vae_name = 'vae_genre_full_key_full_artist_full'
-model_vae_name = 'vae_key_full_test1'
+#%% Feed the data forward to the VAE and evaluate
+# model_vae_name = 'vae_genre_full_artist_full_key_full_small'
+model_vae_name = 'vae_full_testparams'
 vae_eval.plot_perfs(model_vae_name)
 # vae_eval.t_sne_cnn_tasks(X, chunks_list, audioSet)
 
