@@ -22,11 +22,18 @@ def downbeat_detection(track_path, beats_per_bar = 4):
             
     return downbeats
 
-def downbeat_evaluation(files_list, reference_downbeats):
+def tempo_detection(track_path):
+    proc = madmom.features.TempoEstimationProcessor(fps=100)
+    activations = madmom.features.RNNBeatProcessor()(track_path)
+    tempos = proc(activations) #list tempi with probability
+    tempo = tempos[0][0]
+    return tempo
+
+def downbeat_evaluation(files_list, reference_downbeats, beats_per_bar = 4):
     f_measure_list = []
     for i in range(len(files_list)-1):
         print "====== File " + str(i) + " ======"
-        estimated_downbeats = downbeat_detection(files_list[i])
+        estimated_downbeats = downbeat_detection(files_list[i], beats_per_bar)
 #        print reference_downbeats[i]
 #        print estimated_downbeats
         f_measure = mir_eval.beat.f_measure(reference_downbeats[i][0], np.array(estimated_downbeats))
