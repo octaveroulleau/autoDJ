@@ -46,4 +46,4 @@ model_name = 'genre_full_artist_full_key_full' # complete model
 model_cnn = cnn_load.load_CNN_model(model_name)
 
 X_embed = np.asarray(model_cnn.predict(X, verbose = 1))
-vae_train.train_and_save(X_embed, 20, 'vae_full_test') 
+vae_train.train_and_save(X_embed, 10, 'vae_full_test') 

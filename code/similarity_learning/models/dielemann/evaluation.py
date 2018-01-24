@@ -176,6 +176,7 @@ def plot_history(model1_name, model2_name, show_plot = False):
             
         plt.plot(range(len(history_epoch_1)), history_epoch_1, label = model1_name)
         plt.plot(range(len(history_epoch_2)), history_epoch_2, label = model2_name)
+        pl.title('Comparison of the performances of two CNNs')
         plt.legend()
     
         plt.title(model1_name+'/'+model2_name+' comparison')

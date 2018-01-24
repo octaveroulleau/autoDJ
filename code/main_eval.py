@@ -28,7 +28,7 @@ X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, 150) # len(audioSet
 # DOWNBEATS EVALUATION
 #######################
 
-beat.downbeat_evaluation(audioSet.files, audioSet.metadata["downbeat"])
+# beat.downbeat_evaluation(audioSet.files, audioSet.metadata["downbeat"])
 
 # #######################
 # # CNN EVALUATION
@@ -37,7 +37,7 @@ beat.downbeat_evaluation(audioSet.files, audioSet.metadata["downbeat"])
 transform_type, transform_options = audioSet.getTransforms()
 model_name = 'genre_full'
 model_genre = cnn_load.load_CNN_model(model_name, base_dir = './similarity_learning/models/dielemann/saved_models/', model_type = 'base')
-model_genre = keras.models.load_model('./similarity_learning/models/dielemann/saved_models/genre_full_base.h5', custom_objects = {'GlobalLPPooling1D': GlobalLPPooling1D})
+# model_genre = keras.models.load_model('./similarity_learning/models/dielemann/saved_models/genre_full_base.h5', custom_objects = {'GlobalLPPooling1D': GlobalLPPooling1D})
 t_sne_multiple_tracks(model_genre, model_name, [0, 100, 200, 300, 400, 500, 600 ,700 ,800, 900], 'genre', audioSet, audioOptions, alphabet_size =10, show_plot = True)
 # history = plot_history('key_full','genre_full_artist_full_key_full', show_plot=True)
 
@@ -45,8 +45,8 @@ t_sne_multiple_tracks(model_genre, model_name, [0, 100, 200, 300, 400, 500, 600 
 # VAE EVALUATION
 #######################
 
-model_name = 'genre_full_artist_full_key_full'
 #%% Feed the data forward in the CNN
+model_name = 'genre_full_artist_full_key_full'
 model_base = cnn_load.load_CNN_model(model_name)
 X_embed = np.asarray(model_base.predict(X, verbose = 1))
 
