@@ -132,14 +132,14 @@ def plot_history(model1_name, model2_name, show_plot = False):
     filepath = './similarity_learning/models/dielemann/saved_models/'
     print("Loading training history ...")
     
-    history1 = pickle.load(open(filepath+model1_name+'_history.p','rb'))
-    history2 = pickle.load(open(filepath+model2_name+'_history.p','rb'))
+    history1 = pickle.load(open(filepath+model1_name+'_history.pkl','rb'))
+    history2 = pickle.load(open(filepath+model2_name+'_history.pkl','rb'))
     
     print('Loaded.')
     print('Plotting training history :')
     history_epoch_1 = []
     val_loss_1 = 0
-    length = 0
+    length = 1
     last_key = ['epoch','0','batch','0']
     
     for keys in history1.keys():
@@ -148,14 +148,14 @@ def plot_history(model1_name, model2_name, show_plot = False):
             val_loss_1 = val_loss_1/length
             history_epoch_1.append(val_loss_1)
             val_loss_1 = 0
-            length = 0
+            length = 1
         val_loss_1 = val_loss_1 + history1[keys]['val_loss'][0]
         length = length + 1
         last_key = keys_split
     
     history_epoch_2 = []
     val_loss_2 = 0
-    length = 0
+    length = 1
     last_key = ['epoch','0','batch','0']
     for keys in history2.keys():
         keys_split = keys.split(' ')
@@ -163,7 +163,7 @@ def plot_history(model1_name, model2_name, show_plot = False):
             val_loss_2 = val_loss_2/length
             history_epoch_2.append(val_loss_2)
             val_loss_1 = 0
-            length = 0
+            length = 1
         val_loss_2 = val_loss_2 + history1[keys]['val_loss'][0]
         length = length + 1
         last_key = keys_split
@@ -176,7 +176,7 @@ def plot_history(model1_name, model2_name, show_plot = False):
             
         plt.plot(range(len(history_epoch_1)), history_epoch_1, label = model1_name)
         plt.plot(range(len(history_epoch_2)), history_epoch_2, label = model2_name)
-        pl.title('Comparison of the performances of two CNNs')
+        plt.title('Comparison of the performances of two CNNs')
         plt.legend()
     
         plt.title(model1_name+'/'+model2_name+' comparison')

@@ -18,7 +18,8 @@ import keras
 import data
 from similarity_learning.models.dielemann.build import GlobalLPPooling1D
 from similarity_learning.models.dielemann.evaluation import t_sne_multiple_tracks, plot_history
-
+ 
+"""
 #%% Load audio data and pre-process
 audioSet, audioOptions = data.import_data.import_data()
 chunks_list = pr.dataset_to_chunkList(audioSet, int(SR))
@@ -39,6 +40,7 @@ model_name = 'genre_full'
 model_genre = cnn_load.load_CNN_model(model_name, base_dir = './similarity_learning/models/dielemann/saved_models/', model_type = 'base')
 # model_genre = keras.models.load_model('./similarity_learning/models/dielemann/saved_models/genre_full_base.h5', custom_objects = {'GlobalLPPooling1D': GlobalLPPooling1D})
 t_sne_multiple_tracks(model_genre, model_name, [0, 100, 200, 300, 400, 500, 600 ,700 ,800, 900], 'genre', audioSet, audioOptions, alphabet_size =10, show_plot = True)
+######## WARNING : nb_frames = 4000
 # history = plot_history('key_full','genre_full_artist_full_key_full', show_plot=True)
 
 #######################
@@ -61,3 +63,6 @@ vae_eval.t_sne_cnn_tasks(X, chunks_list, audioSet)
 
 # Evaluate the full process using the custom design toymix
 # vae_eval.t_sne_toymix(X_embed, model_vae_name, chunks_list, audioSet)
+"""
+
+plot_history('_test_artist','genre_full_test_artist', show_plot=True)

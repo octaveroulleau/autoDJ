@@ -67,7 +67,7 @@ def asynchronous_learning(audioSet,
                           task = "genre", 
                           freq_bins = 168, 
                           batch_size = 10, 
-                          nb_epochs = 200,
+                          nb_epochs = 50,
                           transfer_learning = False,
                           model_base_name = None):
     '''
@@ -227,7 +227,7 @@ def save_model(model_full,
     print('Save model to ...')
     filepath_base = pathmodel + name + '_base.h5'
     filepath_full = pathmodel + name + '_full.h5'
-    filename_history = pathmodel + name + '_history'
+    filename_history = pathmodel + name + '_history.pkl'
     filename_options = pathmodel + name + '_options'
 
     try:
@@ -262,7 +262,7 @@ def save_model(model_full,
                 name = input('Model name: ')
                 filepath_base = pathmodel + name + '_base.h5'
                 filepath_full = pathmodel + name + '_full.h5'
-                filename_history = pathmodel + name + '_history'
+                filename_history = pathmodel + name + '_history' + '.pkl'
 
                 print('Save base model as ' + name + '_base.h5' + '...')
                 model_base.save(filepath_base)
@@ -295,7 +295,7 @@ def save_model(model_full,
         model_full.save(filepath_full)
         print('Base model saved in '+ filepath_full)
 
-        print('Save history as ' + name + '_history...')
+        print('Save history as ' + name + '_history.pkl ...')
         file_history = open(filename_history, 'wb')
         pickle.dump(history, file_history)
         print('History saved in' + filename_history)

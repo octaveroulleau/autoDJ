@@ -50,7 +50,7 @@ def preprocess_for_cnn(audioSet, audioOptions, nb_files):
 		for i in range(len(chunks)):
 			chunk = chunks[i].get_cqt(audioSet, audioOptions)
 			nbBins = chunk.shape[0]
-			chunk = skt.resize(chunk, (nbBins, 100), mode='reflect')
+			chunk = skt.resize(chunk, (nbBins, 100), mode='reflect') ############### 100 -> 4000 here !
 			data.append(chunk)
 			custom_chunk_list.add_chunk(chunk)
 
