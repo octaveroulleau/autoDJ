@@ -13,3 +13,17 @@ You can check that you have the required packages in
 For this you will have to have the same architecture as on the server (Glendronach).
 This architecture is provided below.
 Try our three main files and have fun !
+
+#### Architecture to run the project :
+
+* PAM/
+   ** autodj/
+    ***    autoDJ/ # The git repository
+    ***        code/ # Launch scripts from this directory
+    ***        README.md # You are here
+  **  autodj_sets/
+    ***    data/
+    ***    datasets/
+    ****        gtzan/
+    ***    export/
+    ***    import.py
