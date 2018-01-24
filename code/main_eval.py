@@ -16,6 +16,13 @@ from re_synthesis.const import SR
 # chunks_list = pr.dataset_to_chunkList(audioSet, int(SR))
 # X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, 450) # 150 len(audioSet.files)
 
+
+#######################
+# DOWNBEATS EVALUATION
+#######################
+
+downbeat_evaluation()
+
 # #######################
 # # CNN EVALUATION
 # #######################
@@ -49,3 +56,5 @@ vae_eval.plot_perfs(model_vae_name)
 
 # Evaluate the full process using the custom design toymix
 # vae_eval.t_sne_toymix(X_embed, model_vae_name, chunks_list, audioSet)
+
+# Toymix here
