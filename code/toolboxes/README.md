@@ -4,7 +4,8 @@ Here are the required toolboxes and packages to run the project :
 --- Signal Processing ---
 
 * Madmom  
-* Librosa  
+* Librosa
+* MirEval
 
 --- Machine Learning ---
 

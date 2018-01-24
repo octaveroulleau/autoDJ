@@ -18,7 +18,7 @@ from similarity_learning.models.asynchronous.asynchronous import asynchronous_le
 audioSet, audioOptions = data.import_data.import_data()
 
 #%% Pre-process data
-X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, 4) # len(audioSet.files)
+X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, 150) # len(audioSet.files)
 print('Dataset loaded.')
 
 #%% Train CNNs asynchronously + save model
@@ -42,8 +42,8 @@ asyn.asynchronous_learning(audioSet, audioOptions, nb_frames, mod_options, model
 
 
 #%% Train VAE + save model
-model_name = 'genre_full'
-model_cnn, _ = cnn_load.load_CNN_model(model_name)
+model_name = 'genre_full_artist_full_key_full' # complete model
+model_cnn = cnn_load.load_CNN_model(model_name)
 
 X_embed = np.asarray(model_cnn.predict(X, verbose = 1))
-vae_train.train_and_save(X_embed, 20, 'vae_genre_full')  # max_epochs = 1000
+vae_train.train_and_save(X_embed, 10, 'vae_full_test') 

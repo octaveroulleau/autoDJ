@@ -21,6 +21,8 @@ from collections import OrderedDict
           
 from .variational_modules import VariationalLayer
 
+import pdb
+
 
 class VanillaVAE(nn.Module):
     # initialisation of the VAE
@@ -46,17 +48,17 @@ class VanillaVAE(nn.Module):
         phidden_dec = dict(phidden); phidden_dec['batch_norm'] = False
         return nn.ModuleList([VariationalLayer(platent, pinput, phidden, nn_lin="ReLU", name="vae_decoder")])
         
-    def guide(self, x):
-        raise NotImplementedError("don't use it plzz")
-        pyro.module("encoder", self.encoders)
-        z_params = self.encoder.forward(x)
-        if type(z_params)!=tuple:
-            z_params = (z_params, )
-        if self.distributions["latent"] == dist.normal:
-            z_params = list(z_params)
-            z_params[1] = torch.exp(z_params[1])
-            z_params = tuple(z_params)
-        pyro.sample("latent", self.lparams["dist"], *z_params)
+    # def guide(self, x):
+    #     raise NotImplementedError("don't use it plzz")
+    #     pyro.module("encoder", self.encoders)
+    #     z_params = self.encoder.forward(x)
+    #     if type(z_params)!=tuple:
+    #         z_params = (z_params, )
+    #     if self.distributions["latent"] == dist.normal:
+    #         z_params = list(z_params)
+    #         z_params[1] = torch.exp(z_params[1])
+    #         z_params = tuple(z_params)
+    #     pyro.sample("latent", self.lparams["dist"], *z_params)
         
     # processing methods
     def encode(self, x):
@@ -92,6 +94,7 @@ class VanillaVAE(nn.Module):
             beta = beta*epoch/warmup
             self.optimizer.zero_grad()
             x_params, z_params, z = self.forward(x)
+            # pdb.set_trace()
             global_loss, rec_loss, kld_loss = self.loss(x, x_params, z_params, beta=beta)
             if verbose:
                 print("rec_loss : %f, kld_loss : %f"%(rec_loss.data.numpy(), kld_loss.data.numpy()))

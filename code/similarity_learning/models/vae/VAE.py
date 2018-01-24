@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 from pyro import distributions as dist
 from numpy.random import permutation
 from models.vaes import VanillaVAE, VanillaDLGM, ConditionalVAE
+
+import pdb
 		
 def build_model(model_type, input_dim, label_dim=[0]):
 	""" Allows one to easily build a vae model by selecting one of preset models.
@@ -41,14 +43,6 @@ def build_model(model_type, input_dim, label_dim=[0]):
     -------
 
 	use_label, vae = VAE.build_model("dlgm", input_dim)
-    
-    """
-
-	"""Salut l’ami,
-
-Alors je te conseille effectivement de commencer par la et de toujours conserver le couple ReLU et warm-up, après pour les tests judicieux je dirais:
-Nombre de couches = [1, 2]
-Nombre de neurones = [800, 2000]
 
 	"""
 
@@ -60,8 +54,8 @@ Nombre de neurones = [800, 2000]
 		use_label = False
 
 	if model_type == "dlgm": # for Deep Latent Gaussian Models
-		prior = {"dist":dist.normal, "params":(Variable(torch.Tensor(16).fill_(1), requires_grad=False),
-											   Variable(torch.Tensor(16).zero_(), requires_grad=False))}
+		prior = {"dist":dist.normal, "params":(Variable(torch.Tensor(16).fill_(1), requires_grad=False), 
+											   Variable(torch.Tensor(16).zero_(), requires_grad=False))} 
 		input_params = {"dim":input_dim, "dist":dist.bernoulli}
 		latent_params = [{"dim":64, "dist":dist.normal}, {"dim":32, "dist":dist.normal}, {"dim":16, "dist":dist.normal, "prior":prior}]
 		hidden_params= [{"dim":800, "nlayers":2, "batch_norm":False},
@@ -81,11 +75,11 @@ Nombre de neurones = [800, 2000]
 		use_label = True
 
 	if model_type == "autodj": # Custom architecture for PAM auoDJ
-		prior = {"dist":dist.normal, "params":(Variable(torch.Tensor(20).fill_(1), requires_grad=False),
-											   Variable(torch.Tensor(20).zero_(), requires_grad=False))}
+		prior = {"dist":dist.normal, "params":(Variable(torch.Tensor(8).fill_(1), requires_grad=False),
+											   Variable(torch.Tensor(8).zero_(), requires_grad=False))}
 		input_params = {"dim":input_dim, "dist":dist.bernoulli}
-		latent_params = [{"dim":20, "dist":dist.normal, "prior":prior}]
-		hidden_params= [{"dim":800, "nlayers":1, "batch_norm":False}, {"dim":2000, "nlayers":1, "batch_norm":False}]
+		latent_params = [{"dim":8, "dist":dist.normal, "prior":prior}]
+		hidden_params= [{"dim":800, "nlayers":1, "batch_norm":False}, {"dim":100, "nlayers":1, "batch_norm":False}]
 		vae = VanillaDLGM(input_params, latent_params, hidden_params)
 		use_label = False
 
@@ -141,6 +135,7 @@ def train_vae(vae, data, max_epochs=100, batch_size=100, model_type="dlgm", labe
 				x = x.cuda()
 				
 			# step
+			# pdb.set_trace()
 			batch_loss = vae.step(x, epoch, verbose=False, warmup=1, beta=beta)
 			epoch_loss += batch_loss
 			# print("epoch %d / batch %d / lowerbound : %f "%(epoch, i, batch_loss))
@@ -152,7 +147,10 @@ def train_vae(vae, data, max_epochs=100, batch_size=100, model_type="dlgm", labe
 		# print("epoch %d / val_loss : %f "%(epoch, val_loss))
 			
 		print("---- FINAL EPOCH %d LOSS : %f"%(epoch, epoch_loss))
-		logs[0].append(epoch_loss[0])
+		# Normalize loss against the size of the data
+		size_train = len(batch_ids)//batch_size - 1
+		logs[0].append(epoch_loss[0]/size_train)
+		# logs[0].append(epoch_loss[0])
 		logs[1].append(val_loss[0])
 		
 	return vae, logs
