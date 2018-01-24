@@ -11,6 +11,8 @@ import similarity_learning.models.dielemann.build as build
 
 #%%
 def load_CNN_model(model_name, base_dir = './similarity_learning/models/dielemann/saved_models/', model_type = 'base'):
+	# Loads a CNN model which state is stored as a .h5 file
+	
     filepath_model = base_dir + model_name + '_'+model_type+'.h5'
     filepath_options = base_dir + model_name + '_options'
     

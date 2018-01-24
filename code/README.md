@@ -17,13 +17,13 @@ Try our three main files and have fun !
 #### Architecture to run the project :
 
 * PAM/
-**autodj/
-***autoDJ/ # The git repository
-****code/ # Launch scripts from this directory
-****README.md # You are here
-**autodj_sets/
-***data/
-***datasets/
-****gtzan/
-***export/
-***import.py
+  * autodj/
+    * autoDJ/ # The git repository
+      * code/ # Launch scripts from this directory
+      * README.md # You are here
+  * autodj_sets/
+    * data/
+    * datasets/
+      * gtzan/
+    * export/
+    * import.py

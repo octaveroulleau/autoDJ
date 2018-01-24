@@ -1,2 +1,2 @@
 # autoDJ
-AutoDJ and Mashup Generator using signal/symbolic alignment
+AutoDJ and Mashup Generator using machine learning : Dielemann Convolutional Network, Variational Auto-Encoder.

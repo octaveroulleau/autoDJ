@@ -15,9 +15,7 @@ from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import matplotlib
 import pdb
-#Evaluate full model versus transfer model with t-sne
-#t-sne on one track
-#t-sne on several tracks (10) of different label
+
 
 def t_sne_one_track(model, model_name, test_ID, label, audioSet, audioOptions, alphabet_size, frames = 100, Fs = 22050, show_plot = False):
     #import track and label

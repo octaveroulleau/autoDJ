@@ -43,14 +43,6 @@ def build_model(model_type, input_dim, label_dim=[0]):
     -------
 
 	use_label, vae = VAE.build_model("dlgm", input_dim)
-    
-    """
-
-	"""Salut l’ami,
-
-Alors je te conseille effectivement de commencer par la et de toujours conserver le couple ReLU et warm-up, après pour les tests judicieux je dirais:
-Nombre de couches = [1, 2]
-Nombre de neurones = [800, 2000]
 
 	"""
 
