@@ -75,11 +75,11 @@ def build_model(model_type, input_dim, label_dim=[0]):
 		use_label = True
 
 	if model_type == "autodj": # Custom architecture for PAM auoDJ
-		prior = {"dist":dist.normal, "params":(Variable(torch.Tensor(8).fill_(1), requires_grad=False),
-											   Variable(torch.Tensor(8).zero_(), requires_grad=False))}
+		prior = {"dist":dist.normal, "params":(Variable(torch.Tensor(16).fill_(1), requires_grad=False),
+											   Variable(torch.Tensor(16).zero_(), requires_grad=False))}
 		input_params = {"dim":input_dim, "dist":dist.bernoulli}
-		latent_params = [{"dim":8, "dist":dist.normal, "prior":prior}]
-		hidden_params= [{"dim":800, "nlayers":1, "batch_norm":False}, {"dim":100, "nlayers":1, "batch_norm":False}]
+		latent_params = [{"dim":16, "dist":dist.normal, "prior":prior}]
+		hidden_params= [{"dim":800, "nlayers":1, "batch_norm":False}] # {"dim":800, "nlayers":1, "batch_norm":False}, 
 		vae = VanillaDLGM(input_params, latent_params, hidden_params)
 		use_label = False
 
@@ -115,7 +115,7 @@ def train_vae(vae, data, max_epochs=100, batch_size=100, model_type="dlgm", labe
     
 	epoch = -1
 	# Beta = [0.5, 1, 4]
-	beta = 4
+	beta = 1
 	logs = [[],[]]
 
 	while epoch < max_epochs:
