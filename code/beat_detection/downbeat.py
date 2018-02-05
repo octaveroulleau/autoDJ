@@ -30,15 +30,13 @@ def tempo_detection(track_path):
     return tempo
 
 def downbeat_evaluation(files_list, reference_downbeats, beats_per_bar = 4):
+    # Prints output to console
     print("Performing downbeat evaluation.")
     f_measure_list = []
     for i in range(10): # len(files_list)-1
         print("====== File " + str(i) + " ======")
         estimated_downbeats = downbeat_detection(files_list[i], beats_per_bar)
-#        print reference_downbeats[i]
-#        print estimated_downbeats
         f_measure = mir_eval.beat.f_measure(reference_downbeats[i][0], np.array(estimated_downbeats))
-#        print f_measure
         f_measure_list.append(f_measure)
     
     print(" F measure for each file :", f_measure_list)

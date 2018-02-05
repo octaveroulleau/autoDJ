@@ -17,7 +17,7 @@ from re_synthesis.const import SR
 audioSet, audioOptions = data.import_data.import_data()
 chunks_list = pr.dataset_to_chunkList(audioSet, int(SR))
 # Load the audio data and pre-process
-X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, 50)
+X = nns_data_load.preprocess_for_cnn(audioSet, audioOptions, 150) #500
 
 #%% Feed the data forward in the CNN
 model_name = 'genre_full_artist_full_key_full'
@@ -27,11 +27,11 @@ X_embed = np.asarray(model_base.predict(X, verbose = 1))
 #%% Feed the data to the VAE
 # Feed to the VAE and return indexes of nearest chunks
 idx_nearest_chunks = vae_comp.compose_line(X_embed)
-# print(idx_nearest_chunks)
 # From this, establish the list of mixing points
 mp_list = vae_comp.chunks_to_mp(idx_nearest_chunks, chunks_list, audioSet)
 print(mp_list)
 
 #%% Re-synthetize data (auto-DJ)
 finalset = re.compose_track(mp_list)
-re.write_track(finalset, 'test.wav')
+re.write_track(finalset, '../test_mix.wav')
+

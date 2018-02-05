@@ -53,7 +53,7 @@ def compose_line(data):
 
 	# Load a pre-trained VAE
 	dirpath = 'similarity_learning/models/vae/'
-	vae = VAE.load_vae(dirpath + 'saved_models/' + 'vae_genre_full_artist_full_key_full' + '.t7')
+	vae = VAE.load_vae(dirpath + 'saved_models/' + 'vae_full_beta1_1layer800' + '.t7')
 
 	# Perform a forward pass to project data to the embedding space
 	x = Variable(torch.from_numpy(data))
@@ -65,18 +65,23 @@ def compose_line(data):
 	# Random walk parameters : here, the parameters of a line.
 	# First select two random datapoints as support for the trajectory
 	idx_a = np.random.randint(nb_chunks_total)
-	idx_b = np.random.randint(nb_chunks_total)
+	idx_b = np.random.randint(nb_chunks_total) 
 	if (idx_a == idx_b) :
 		# Make sure idx_b != idx_a
 		idx_b = (idx_a + 1) % nb_chunks_total
 	a = embedded_data[idx_a,:]
 	b = embedded_data[idx_b,:]
+	# a = data[idx_a,:]
+	# b = data[idx_b,:]
 	discrete_line = create_discrete_line(dim_embedd_space, nb_chunks_mix,a,b)
+	# discrete_line = create_discrete_line(data.shape[1], nb_chunks_mix,a,b)
 	
 	# For each point of the line, find its nearest neighbor in the embedded dataset
 	idx_nearest_chunks = np.argmin(cdist(discrete_line,embedded_data),1) 
+	# idx_nearest_chunks = np.argmin(cdist(discrete_line,data),1) 
 	print("Chunks on the path :", idx_nearest_chunks)
 	# test_create_line(nb_chunks_mix,a[:3],b[:3])
+	# idx_nearest_chunks = [min(x,13000) for x in idx_nearest_chunks]
 	return idx_nearest_chunks
 
 def create_discrete_line(dim_embedd_space, nb_chunks_mix,a,b):
@@ -168,6 +173,8 @@ def chunks_to_mp(idx_nearest_chunks, chunks_list, audioSet):
 	"""
 
 	mixing_points = []
+	print('~~~~~~~~~~~~~~~~~~~~~', len(chunks_list.list_of_chunks))
+	print(idx_nearest_chunks)
 	previous_track_id = chunks_list.list_of_chunks[idx_nearest_chunks[0]].track_id # no mixing point at the beginning
 	previous_ech_debut = chunks_list.list_of_chunks[idx_nearest_chunks[0]].ech_debut
 	previous_ech_fin = -1
